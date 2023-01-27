@@ -1,0 +1,4785 @@
+{
+  "rules": [
+    {
+      "id": "python.lang.maintainability.useless-assign-keyed.useless-assignment-keyed",
+      "languages": [
+        "python"
+      ],
+      "message": "key `$Y` in `$X` is assigned twice; the first assignment is useless",
+      "metadata": {
+        "category": "maintainability",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "9AU1KY",
+            "url": "https://semgrep.dev/playground/r/JdTojL/python.lang.maintainability.useless-assign-keyed.useless-assignment-keyed",
+            "version_id": "JdTojL"
+          }
+        },
+        "shortlink": "https://sg.run/zv6G",
+        "source": "https://semgrep.dev/r/python.lang.maintainability.useless-assign-keyed.useless-assignment-keyed",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "$X[$Y] = ...\n$X[$Y] = ...\n"
+        },
+        {
+          "pattern": "$X[$Y][$Z] = ...\n$X[$Y][$Z] = ...\n"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.django.correctness.use-decimalfield-for-money.use-decimalfield-for-money",
+      "languages": [
+        "python"
+      ],
+      "message": "Found a FloatField used for variable $F. Use DecimalField for currency fields to avoid float-rounding errors.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "NbUk89",
+            "url": "https://semgrep.dev/playground/r/X0TA6x/python.django.correctness.use-decimalfield-for-money.use-decimalfield-for-money",
+            "version_id": "X0TA6x"
+          }
+        },
+        "shortlink": "https://sg.run/2xzL",
+        "source": "https://semgrep.dev/r/python.django.correctness.use-decimalfield-for-money.use-decimalfield-for-money",
+        "technology": [
+          "django"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-inside": "class $M(...):\n  ...\n"
+        },
+        {
+          "pattern": "$F = django.db.models.FloatField(...)"
+        },
+        {
+          "metavariable-regex": {
+            "metavariable": "$F",
+            "regex": ".*([pP][rR][iI][cC][eE]|[aA][mM][oO][uU][nN][tT]|[sS][uU][bB][tT][oO][tT][aA][lL]|[dD][oO][nN][aA][tT][iI][oO][nN]|[fF][eE][eE]|[sS][aA][lL][aA][rR][yY]|[pP][rR][eE][cC][iI][oO]).*"
+          }
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.django.best-practice.use-onetoonefield.use-onetoonefield",
+      "languages": [
+        "python"
+      ],
+      "message": "Use 'django.db.models.OneToOneField' instead of 'ForeignKey' with unique=True. 'OneToOneField' is used to create one-to-one relationships.",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "zdUk4Z",
+            "url": "https://semgrep.dev/playground/r/0bTpPy/python.django.best-practice.use-onetoonefield.use-onetoonefield",
+            "version_id": "0bTpPy"
+          }
+        },
+        "shortlink": "https://sg.run/W8Q2",
+        "source": "https://semgrep.dev/r/python.django.best-practice.use-onetoonefield.use-onetoonefield",
+        "technology": [
+          "django"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-inside": "class $M(...):\n  ...\n"
+        },
+        {
+          "pattern": "$F = django.db.models.ForeignKey(..., unique=True, ...)"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.lang.correctness.return-in-init.yield-in-init",
+      "languages": [
+        "python"
+      ],
+      "message": "`yield` should never appear inside a class __init__ function. This will cause a runtime error.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "BYUNYe",
+            "url": "https://semgrep.dev/playground/r/d6T6xk/python.lang.correctness.return-in-init.yield-in-init",
+            "version_id": "d6T6xk"
+          }
+        },
+        "shortlink": "https://sg.run/PJ6Y",
+        "source": "https://semgrep.dev/r/python.lang.correctness.return-in-init.yield-in-init",
+        "technology": [
+          "python"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-inside": "class $A(...):\n    ...\n"
+        },
+        {
+          "pattern-inside": "def __init__(...):\n    ...\n"
+        },
+        {
+          "pattern-not-inside": "def __init__(...):\n    ...\n    def $F(...):\n        ...\n"
+        },
+        {
+          "pattern-either": [
+            {
+              "pattern": "yield ..."
+            },
+            {
+              "pattern": "yield"
+            }
+          ]
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.best-practice.hardcoded-tmp-path.hardcoded-tmp-path",
+      "languages": [
+        "python"
+      ],
+      "message": "Detected hardcoded temp directory. Consider using 'tempfile.TemporaryFile' instead.",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "references": [
+          "https://docs.python.org/3/library/tempfile.html#tempfile.TemporaryFile"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "yyUnXZ",
+            "url": "https://semgrep.dev/playground/r/xyTdrr/python.lang.best-practice.hardcoded-tmp-path.hardcoded-tmp-path",
+            "version_id": "xyTdrr"
+          }
+        },
+        "shortlink": "https://sg.run/zv0W",
+        "source": "https://semgrep.dev/r/python.lang.best-practice.hardcoded-tmp-path.hardcoded-tmp-path",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "open(\"=~/^\\/tmp.*/\", ...)",
+      "severity": "WARNING"
+    },
+    {
+      "fix": "check_call",
+      "id": "python.lang.correctness.unchecked-returns.unchecked-subprocess-call",
+      "languages": [
+        "python"
+      ],
+      "message": "This is not checking the return value of this subprocess call; if it fails no exception will be raised. Consider subprocess.check_call() instead",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "references": [
+          "https://docs.python.org/3/library/subprocess.html#subprocess.check_call"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "DbUp82",
+            "url": "https://semgrep.dev/playground/r/PkTOpw/python.lang.correctness.unchecked-returns.unchecked-subprocess-call",
+            "version_id": "PkTOpw"
+          }
+        },
+        "shortlink": "https://sg.run/J9Ww",
+        "source": "https://semgrep.dev/r/python.lang.correctness.unchecked-returns.unchecked-subprocess-call",
+        "technology": [
+          "python"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern": "subprocess.$CALL(...)"
+        },
+        {
+          "pattern-not-inside": "$S = subprocess.call(...)"
+        },
+        {
+          "pattern-not-inside": "subprocess.call(...) == $X"
+        },
+        {
+          "pattern-not-inside": "return subprocess.call(...)"
+        },
+        {
+          "metavariable-pattern": {
+            "metavariable": "$CALL",
+            "pattern": "call"
+          }
+        },
+        {
+          "focus-metavariable": "$CALL"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.django.correctness.model-save.django-db-model-save-super",
+      "languages": [
+        "python"
+      ],
+      "message": "Detected a django model `$MODEL` is not calling super().save() inside of the save method.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "9AU1BD",
+            "url": "https://semgrep.dev/playground/r/o5TK82/python.django.correctness.model-save.django-db-model-save-super",
+            "version_id": "o5TK82"
+          }
+        },
+        "shortlink": "https://sg.run/6nN1",
+        "source": "https://semgrep.dev/r/python.django.correctness.model-save.django-db-model-save-super",
+        "technology": [
+          "django"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-inside": "class $MODEL(django.db.models.Model):\n    ...\n"
+        },
+        {
+          "pattern-not": "def save(self, ...):\n  ...\n  super($MODEL, self).save(...)\n"
+        },
+        {
+          "pattern-not": "def save(self, ...):\n  ...\n  super().save(...)\n"
+        },
+        {
+          "pattern": "def save(self, ...):\n  ...\n"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "go.lang.best-practice.hidden-goroutine.hidden-goroutine",
+      "languages": [
+        "go"
+      ],
+      "message": "Detected a hidden goroutine. Function invocations are expected to synchronous, and this function will execute asynchronously because all it does is call a goroutine. Instead, remove the internal goroutine and call the function using 'go'.",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "BYUNq6",
+            "url": "https://semgrep.dev/playground/r/bZTLJG/go.lang.best-practice.hidden-goroutine.hidden-goroutine",
+            "version_id": "bZTLJG"
+          }
+        },
+        "shortlink": "https://sg.run/DopW",
+        "source": "https://semgrep.dev/r/go.lang.best-practice.hidden-goroutine.hidden-goroutine",
+        "technology": [
+          "go"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-not": "func $FUNC(...) {\n  go func() {\n    ...\n  }(...)\n  $MORE\n}\n"
+        },
+        {
+          "pattern": "func $FUNC(...) {\n  go func() {\n    ...\n  }(...)\n}\n"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "ocaml.lang.correctness.useless_if.ocamllint-useless-if",
+      "languages": [
+        "ocaml"
+      ],
+      "message": "Useless if. Both branches are equal.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "5rUOzN",
+            "url": "https://semgrep.dev/playground/r/A8TGZg/ocaml.lang.correctness.useless_if.ocamllint-useless-if",
+            "version_id": "A8TGZg"
+          }
+        },
+        "shortlink": "https://sg.run/7o3Q",
+        "source": "https://semgrep.dev/r/ocaml.lang.correctness.useless_if.ocamllint-useless-if"
+      },
+      "pattern": "if $X then $E else $E",
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.correctness.list-modify-iterating.list-modify-while-iterate",
+      "languages": [
+        "python"
+      ],
+      "message": "It appears that `$LIST` is a list that is being modified while in a for loop. This will likely cause a runtime error or an infinite loop.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "GdU7wZ",
+            "url": "https://semgrep.dev/playground/r/O9Tvxx/python.lang.correctness.list-modify-iterating.list-modify-while-iterate",
+            "version_id": "O9Tvxx"
+          }
+        },
+        "shortlink": "https://sg.run/0Qr5",
+        "source": "https://semgrep.dev/r/python.lang.correctness.list-modify-iterating.list-modify-while-iterate",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "for $ELEMENT in $LIST:\n  ...\n  $LIST.pop(...)\n"
+        },
+        {
+          "pattern": "for $ELEMENT in $LIST:\n  ...\n  $LIST.push(...)\n"
+        },
+        {
+          "pattern": "for $ELEMENT in $LIST:\n  ...\n  $LIST.append(...)\n"
+        },
+        {
+          "pattern": "for $ELEMENT in $LIST:\n  ...\n  $LIST.extend(...)\n"
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.correctness.concurrent.uncaught-executor-exceptions",
+      "languages": [
+        "python"
+      ],
+      "message": "Values returned by thread pool map must be read in order to raise exceptions. Consider using `for _ in $EXECUTOR.map(...): pass`.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "references": [
+          "https://superfastpython.com/threadpoolexecutor-exception-handling/"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "lBU9Pl",
+            "url": "https://semgrep.dev/playground/r/44TGXK/python.lang.correctness.concurrent.uncaught-executor-exceptions",
+            "version_id": "44TGXK"
+          }
+        },
+        "shortlink": "https://sg.run/Av48",
+        "source": "https://semgrep.dev/r/python.lang.correctness.concurrent.uncaught-executor-exceptions",
+        "technology": [
+          "python"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-inside": "with concurrent.futures.thread.ThreadPoolExecutor(...) as $EXECUTOR:\n  ...\n"
+        },
+        {
+          "pattern-not-inside": "$VAR = $EXECUTOR.map(...)\n...\nfor ... in $VAR:\n  ...\n"
+        },
+        {
+          "pattern-not-inside": "$VAR = $EXECUTOR.map(...)\n...\n[... for ... in $VAR]\n"
+        },
+        {
+          "pattern-not-inside": "[... for ... in $EXECUTOR.map(...)]\n"
+        },
+        {
+          "pattern-not-inside": "for $IT in $EXECUTOR.map(...):\n  ...\n"
+        },
+        {
+          "pattern": "$EXECUTOR.map(...)"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.django.performance.access-foreign-keys.access-foreign-keys",
+      "languages": [
+        "python"
+      ],
+      "message": "You should use ITEM.user_id rather than ITEM.user.id to prevent running an extra query.",
+      "metadata": {
+        "category": "performance",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "kxUkqk",
+            "url": "https://semgrep.dev/playground/r/ZRTNkn/python.django.performance.access-foreign-keys.access-foreign-keys",
+            "version_id": "ZRTNkn"
+          }
+        },
+        "shortlink": "https://sg.run/XBoB",
+        "source": "https://semgrep.dev/r/python.django.performance.access-foreign-keys.access-foreign-keys",
+        "technology": [
+          "django"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-either": [
+            {
+              "pattern-inside": "from django.$Y import $Z\n...\n"
+            },
+            {
+              "pattern-inside": "import django\n...\n"
+            }
+          ]
+        },
+        {
+          "pattern": "$X.user.id"
+        },
+        {
+          "pattern-not": "request.user.id"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "java.lang.correctness.eqeq.eqeq",
+      "languages": [
+        "java"
+      ],
+      "message": "`$X == $X` or `$X != $X` is always true. (Unless the value compared is a float or double). To test if `$X` is not-a-number, use `Double.isNaN($X)`.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "9AU1x1",
+            "url": "https://semgrep.dev/playground/r/A8TNP7/java.lang.correctness.eqeq.eqeq",
+            "version_id": "A8TNP7"
+          }
+        },
+        "shortlink": "https://sg.run/qx1x",
+        "source": "https://semgrep.dev/r/java.lang.correctness.eqeq.eqeq",
+        "technology": [
+          "java"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-not-inside": "assert $X;"
+        },
+        {
+          "pattern-not-inside": "assert $X : $Y;\n"
+        },
+        {
+          "pattern-either": [
+            {
+              "pattern": "$X == $X"
+            },
+            {
+              "pattern": "$X != $X"
+            }
+          ]
+        },
+        {
+          "pattern-not": "1 == 1"
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.compatibility.python37.python37-compatibility-importlib2",
+      "languages": [
+        "python"
+      ],
+      "message": "Found 'importlib.resources', which is a module only available on Python 3.7+. This does not work in lower versions, and therefore is not backwards compatible. Use importlib_resources instead for older Python versions.",
+      "metadata": {
+        "category": "compatibility",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "L1Uy0n",
+            "url": "https://semgrep.dev/playground/r/5PTN1p/python.lang.compatibility.python37.python37-compatibility-importlib2",
+            "version_id": "5PTN1p"
+          }
+        },
+        "shortlink": "https://sg.run/eL3y",
+        "source": "https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-importlib2",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "import importlib.resources",
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.correctness.common-mistakes.is-comparison-string.identical-is-comparison",
+      "languages": [
+        "python"
+      ],
+      "message": "Found identical comparison using is. Ensure this is what you intended.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "YGURPw",
+            "url": "https://semgrep.dev/playground/r/1QT4pR/python.lang.correctness.common-mistakes.is-comparison-string.identical-is-comparison",
+            "version_id": "1QT4pR"
+          }
+        },
+        "shortlink": "https://sg.run/Do5Y",
+        "source": "https://semgrep.dev/r/python.lang.correctness.common-mistakes.is-comparison-string.identical-is-comparison",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "$S is $S",
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.correctness.file-object-redefined-before-close.file-object-redefined-before-close",
+      "languages": [
+        "python"
+      ],
+      "message": "Detected a file object that is redefined and never closed. This could leak file descriptors and unnecessarily consume system resources.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "5rUO54",
+            "url": "https://semgrep.dev/playground/r/xyTdzr/python.lang.correctness.file-object-redefined-before-close.file-object-redefined-before-close",
+            "version_id": "xyTdzr"
+          }
+        },
+        "shortlink": "https://sg.run/W81g",
+        "source": "https://semgrep.dev/r/python.lang.correctness.file-object-redefined-before-close.file-object-redefined-before-close",
+        "technology": [
+          "python"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern": "$F = open($X, ...)\n...\n$F = open($Y, ...)\n"
+        },
+        {
+          "pattern-not": "$F = open($X, ...)\n...\n$F.close()\n...\n$F = open($Y, ...)\n"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.lang.compatibility.python37.python37-compatibility-pdb",
+      "languages": [
+        "python"
+      ],
+      "message": "pdb.set_trace() with the header argument is only available on Python 3.7+ and is therefore not backwards compatible. Instead, use set_trace() without the header argument.",
+      "metadata": {
+        "category": "compatibility",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "KxUby2",
+            "url": "https://semgrep.dev/playground/r/pZTb3R/python.lang.compatibility.python37.python37-compatibility-pdb",
+            "version_id": "pZTb3R"
+          }
+        },
+        "shortlink": "https://sg.run/GeA2",
+        "source": "https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-pdb",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "pdb.set_trace(header=$X, ...)",
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.correctness.return-in-init.return-in-init",
+      "languages": [
+        "python"
+      ],
+      "message": "`return` should never appear inside a class __init__ function. This will cause a runtime error.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "AbUzYe",
+            "url": "https://semgrep.dev/playground/r/vdTv6P/python.lang.correctness.return-in-init.return-in-init",
+            "version_id": "vdTv6P"
+          }
+        },
+        "shortlink": "https://sg.run/4xwl",
+        "source": "https://semgrep.dev/r/python.lang.correctness.return-in-init.return-in-init",
+        "technology": [
+          "python"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-inside": "class $A(...):\n    ...\n"
+        },
+        {
+          "pattern-inside": "def __init__(...):\n    ...\n"
+        },
+        {
+          "pattern-not-inside": "def __init__(...):\n    ...\n    def $F(...):\n        ...\n"
+        },
+        {
+          "patterns": [
+            {
+              "pattern": "return ..."
+            },
+            {
+              "pattern-not": "return"
+            },
+            {
+              "pattern-not": "return None"
+            }
+          ]
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.django.best-practice.upsell_django_environ.use-django-environ",
+      "languages": [
+        "python"
+      ],
+      "message": "You are using environment variables inside django app. Use `django-environ` as it a better alternative for deployment.",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "oqUeND",
+            "url": "https://semgrep.dev/playground/r/WrTY4W/python.django.best-practice.upsell_django_environ.use-django-environ",
+            "version_id": "WrTY4W"
+          }
+        },
+        "shortlink": "https://sg.run/DoQP",
+        "source": "https://semgrep.dev/r/python.django.best-practice.upsell_django_environ.use-django-environ",
+        "technology": [
+          "django"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-not-inside": "import environ\n...\n"
+        },
+        {
+          "pattern-either": [
+            {
+              "pattern": "import django\n...\nimport os\n...\n$FOO = $M.environ[...]\n"
+            },
+            {
+              "pattern": "import os\n...\nimport django\n...\n$FOO = $M.environ[...]\n"
+            }
+          ]
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "go.lang.best-practice.channel-guarded-with-mutex.channel-guarded-with-mutex",
+      "languages": [
+        "go"
+      ],
+      "message": "Detected a channel guarded with a mutex. Channels already have an internal mutex, so this is unnecessary. Remove the mutex. See https://hackmongo.com/page/golang-antipatterns/#guarded-channel for more information.",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "AbUzDB",
+            "url": "https://semgrep.dev/playground/r/rxTjX5/go.lang.best-practice.channel-guarded-with-mutex.channel-guarded-with-mutex",
+            "version_id": "rxTjX5"
+          }
+        },
+        "shortlink": "https://sg.run/Bko9",
+        "source": "https://semgrep.dev/r/go.lang.best-practice.channel-guarded-with-mutex.channel-guarded-with-mutex",
+        "technology": [
+          "go"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "$MUX.Lock()\n$VALUE <- $CHANNEL\n$MUX.Unlock()\n"
+        },
+        {
+          "pattern": "$MUX.Lock()\n$VALUE = <- $CHANNEL\n$MUX.Unlock()\n"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "go.lang.correctness.permissions.file_permission.incorrect-default-permission",
+      "languages": [
+        "go"
+      ],
+      "message": "Detected file permissions that are set to more than `0600` (user/owner can read and write). Setting file permissions to higher than `0600` is most likely unnecessary and violates the principle of least privilege. Instead, set permissions to be `0600` or less for os.Chmod, os.Mkdir, os.OpenFile, os.MkdirAll, and ioutil.WriteFile",
+      "metadata": {
+        "category": "correctness",
+        "cwe": "CWE-276: Incorrect Default Permissions",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "qNUj6y",
+            "url": "https://semgrep.dev/playground/r/xyTdlK/go.lang.correctness.permissions.file_permission.incorrect-default-permission",
+            "version_id": "xyTdlK"
+          }
+        },
+        "shortlink": "https://sg.run/PJdq",
+        "source": "https://semgrep.dev/r/go.lang.correctness.permissions.file_permission.incorrect-default-permission",
+        "source_rule_url": "https://github.com/securego/gosec",
+        "technology": [
+          "go"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-either": [
+            {
+              "pattern": "os.Chmod($NAME, $PERM)"
+            },
+            {
+              "pattern": "os.Mkdir($NAME, $PERM)"
+            },
+            {
+              "pattern": "os.OpenFile($NAME, $FLAG, $PERM)"
+            },
+            {
+              "pattern": "os.MkdirAll($NAME, $PERM)"
+            },
+            {
+              "pattern": "ioutil.WriteFile($NAME, $DATA, $PERM)"
+            }
+          ]
+        },
+        {
+          "metavariable-comparison": {
+            "base": 8,
+            "comparison": "$PERM > 0o600",
+            "metavariable": "$PERM"
+          }
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "go.lang.correctness.overflow.overflow.integer-overflow-int32",
+      "languages": [
+        "go"
+      ],
+      "message": "Detected conversion of the result of a strconv.Atoi command to an int32. This could lead to an integer overflow, which could possibly result in unexpected behavior and even privilege escalation. Instead, use `strconv.ParseInt`.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "KxUbEk",
+            "url": "https://semgrep.dev/playground/r/w8Tkq1/go.lang.correctness.overflow.overflow.integer-overflow-int32",
+            "version_id": "w8Tkq1"
+          }
+        },
+        "shortlink": "https://sg.run/4xJE",
+        "source": "https://semgrep.dev/r/go.lang.correctness.overflow.overflow.integer-overflow-int32",
+        "technology": [
+          "go"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern": "$F, $ERR := strconv.Atoi($NUM)\n...\nint32($F)\n"
+        },
+        {
+          "metavariable-comparison": {
+            "comparison": "$NUM > 2147483647 or $NUM < -2147483648",
+            "metavariable": "$NUM",
+            "strip": true
+          }
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "java.lang.correctness.hardcoded-conditional.hardcoded-conditional",
+      "languages": [
+        "java"
+      ],
+      "message": "This if statement will always have the same behavior and is therefore unnecessary.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "yyUnKv",
+            "url": "https://semgrep.dev/playground/r/BjTKjL/java.lang.correctness.hardcoded-conditional.hardcoded-conditional",
+            "version_id": "BjTKjL"
+          }
+        },
+        "shortlink": "https://sg.run/l2zj",
+        "source": "https://semgrep.dev/r/java.lang.correctness.hardcoded-conditional.hardcoded-conditional",
+        "technology": [
+          "java"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-either": [
+            {
+              "pattern": "if (true) { ... }"
+            },
+            {
+              "pattern": "if (false) { ... }"
+            },
+            {
+              "pattern": "if ($VAR = true) { ... }"
+            },
+            {
+              "pattern": "if ($VAR = false) { ... }"
+            },
+            {
+              "pattern": "if ($EXPR && false) { ... }"
+            },
+            {
+              "pattern": "if (false && $EXPR) { ... }"
+            },
+            {
+              "pattern": "if ($EXPR || true) { ... }"
+            },
+            {
+              "pattern": "if (true || $EXPR) { ... }"
+            }
+          ]
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "fix": "flask.jsonify($...VAR)\n",
+      "id": "python.flask.best-practice.use-jsonify.use-jsonify",
+      "languages": [
+        "python"
+      ],
+      "message": "flask.jsonify() is a Flask helper method which handles the correct  settings for returning JSON from Flask routes",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "references": [
+          "https://flask.palletsprojects.com/en/2.2.x/api/#flask.json.jsonify"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "NbUkx6",
+            "url": "https://semgrep.dev/playground/r/l4TqoX/python.flask.best-practice.use-jsonify.use-jsonify",
+            "version_id": "l4TqoX"
+          }
+        },
+        "shortlink": "https://sg.run/XBlb",
+        "source": "https://semgrep.dev/r/python.flask.best-practice.use-jsonify.use-jsonify",
+        "technology": [
+          "flask"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern": "$JSONDUMPS"
+        },
+        {
+          "pattern-either": [
+            {
+              "pattern-inside": "return json.dumps($...VAR)\n"
+            },
+            {
+              "pattern-inside": "$DATA = json.dumps($...VAR)\n...\nreturn $DATA\n"
+            }
+          ]
+        },
+        {
+          "pattern-inside": "@app.route(...)\ndef $X():\n  ...\n"
+        },
+        {
+          "metavariable-pattern": {
+            "metavariable": "$JSONDUMPS",
+            "pattern": "json.dumps($...VAR)"
+          }
+        },
+        {
+          "focus-metavariable": "$JSONDUMPS"
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.compatibility.python36.python36-compatibility-Popen2",
+      "languages": [
+        "python"
+      ],
+      "message": "the `encoding` argument to Popen is only available on Python 3.6+",
+      "metadata": {
+        "category": "compatibility",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "EwU2n3",
+            "url": "https://semgrep.dev/playground/r/PkTj3B/python.lang.compatibility.python36.python36-compatibility-Popen2",
+            "version_id": "PkTj3B"
+          }
+        },
+        "shortlink": "https://sg.run/x1Dg",
+        "source": "https://semgrep.dev/r/python.lang.compatibility.python36.python36-compatibility-Popen2",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "subprocess.Popen(encoding=$X, ...)",
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.maintainability.return.code-after-unconditional-return",
+      "languages": [
+        "python"
+      ],
+      "message": "code after return statement will not be executed",
+      "metadata": {
+        "category": "maintainability",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "j2UvZG",
+            "url": "https://semgrep.dev/playground/r/44Tedz/python.lang.maintainability.return.code-after-unconditional-return",
+            "version_id": "44Tedz"
+          }
+        },
+        "shortlink": "https://sg.run/6nOo",
+        "source": "https://semgrep.dev/r/python.lang.maintainability.return.code-after-unconditional-return",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "return ...\n$S\n",
+      "severity": "WARNING"
+    },
+    {
+      "id": "java.lang.correctness.assignment-comparison.assignment-comparison",
+      "languages": [
+        "java"
+      ],
+      "message": "The value of `$X` is being ignored and will be used in the conditional test",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "10UK1b",
+            "url": "https://semgrep.dev/playground/r/RGT2W4/java.lang.correctness.assignment-comparison.assignment-comparison",
+            "version_id": "RGT2W4"
+          }
+        },
+        "shortlink": "https://sg.run/Klod",
+        "source": "https://semgrep.dev/r/java.lang.correctness.assignment-comparison.assignment-comparison",
+        "technology": [
+          "java"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "if ($X=true) { ... }"
+        },
+        {
+          "pattern": "if ($X=false) { ... }"
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.compatibility.python36.python36-compatibility-Popen1",
+      "languages": [
+        "python"
+      ],
+      "message": "the `errors` argument to Popen is only available on Python 3.6+",
+      "metadata": {
+        "category": "compatibility",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "nJUz7A",
+            "url": "https://semgrep.dev/playground/r/44Tejz/python.lang.compatibility.python36.python36-compatibility-Popen1",
+            "version_id": "44Tejz"
+          }
+        },
+        "shortlink": "https://sg.run/weBP",
+        "source": "https://semgrep.dev/r/python.lang.compatibility.python36.python36-compatibility-Popen1",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "subprocess.Popen(errors=$X, ...)",
+      "severity": "ERROR"
+    },
+    {
+      "id": "javascript.lang.correctness.useless-eqeq.eqeq-is-bad",
+      "languages": [
+        "js",
+        "ts"
+      ],
+      "message": "Detected a useless comparison operation `$X == $X` or `$X != $X`. This operation is always true. If testing for floating point NaN, use `math.isnan`, or `cmath.isnan` if the number is complex.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "X5U8Kj",
+            "url": "https://semgrep.dev/playground/r/yeTDE1/javascript.lang.correctness.useless-eqeq.eqeq-is-bad",
+            "version_id": "yeTDE1"
+          }
+        },
+        "shortlink": "https://sg.run/Kl6n",
+        "source": "https://semgrep.dev/r/javascript.lang.correctness.useless-eqeq.eqeq-is-bad",
+        "technology": [
+          "javascript"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-not-inside": "assert(...)"
+        },
+        {
+          "pattern-either": [
+            {
+              "pattern": "$X == $X"
+            },
+            {
+              "pattern": "$X != $X"
+            }
+          ]
+        },
+        {
+          "pattern-not": "1 == 1"
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "javascript.lang.correctness.useless-assign.useless-assignment",
+      "languages": [
+        "js",
+        "ts"
+      ],
+      "message": "`$X` is assigned twice; the first assignment is useless",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "2ZUbOo",
+            "url": "https://semgrep.dev/playground/r/9lTAvP/javascript.lang.correctness.useless-assign.useless-assignment",
+            "version_id": "9lTAvP"
+          }
+        },
+        "shortlink": "https://sg.run/0Q9w",
+        "source": "https://semgrep.dev/r/javascript.lang.correctness.useless-assign.useless-assignment",
+        "technology": [
+          "javascript"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern": "$X = $Y;\n$X = $Z;\n"
+        },
+        {
+          "pattern-not": "$X = $Y;\n$X = <... $X ...>;\n"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "java.lang.correctness.no-string-eqeq.no-string-eqeq",
+      "languages": [
+        "java"
+      ],
+      "message": "Strings should not be compared with '=='. This is a reference comparison operator. Use '.equals()' instead.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "r6UrQ9",
+            "url": "https://semgrep.dev/playground/r/DkT2ob/java.lang.correctness.no-string-eqeq.no-string-eqeq",
+            "version_id": "DkT2ob"
+          }
+        },
+        "shortlink": "https://sg.run/YvxX",
+        "source": "https://semgrep.dev/r/java.lang.correctness.no-string-eqeq.no-string-eqeq",
+        "technology": [
+          "java"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-not": "null == (String $Y)"
+        },
+        {
+          "pattern": "$X == (String $Y)"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.lang.compatibility.python37.python37-compatability-os-module",
+      "languages": [
+        "python"
+      ],
+      "message": "this function is only available on Python 3.7+",
+      "metadata": {
+        "category": "compatibility",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "WAUobx",
+            "url": "https://semgrep.dev/playground/r/1QT5WD/python.lang.compatibility.python37.python37-compatability-os-module",
+            "version_id": "1QT5WD"
+          }
+        },
+        "shortlink": "https://sg.run/J95W",
+        "source": "https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatability-os-module",
+        "technology": [
+          "python"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-not-inside": "if hasattr(os, 'pwrite'):\n    ...\n"
+        },
+        {
+          "pattern": "os.pwrite(...)"
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.compatibility.python37.python37-compatibility-os2-ok2",
+      "languages": [
+        "python"
+      ],
+      "message": "os.pwritev() is only available on Python 3.3+ and is therefore not backwards compatible. Instead, use a combination of pwrite() and writev().",
+      "metadata": {
+        "category": "compatibility",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "0oU5vW",
+            "url": "https://semgrep.dev/playground/r/zyTG29/python.lang.compatibility.python37.python37-compatibility-os2-ok2",
+            "version_id": "zyTG29"
+          }
+        },
+        "shortlink": "https://sg.run/5Q9X",
+        "source": "https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-os2-ok2",
+        "technology": [
+          "python"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-not-inside": "if hasattr(os, 'pwritev'):\n    ...\n"
+        },
+        {
+          "pattern": "os.pwritev(...)"
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "javascript.lang.correctness.no-replaceall.no-replaceall",
+      "languages": [
+        "js",
+        "ts"
+      ],
+      "message": "The string method replaceAll is not supported in all versions of javascript, and is not supported by older browser versions. Consider using replace() with a regex as the first argument instead like mystring.replace(/bad/g, \"good\") instead of mystring.replaceAll(\"bad\", \"good\") (https://discourse.threejs.org/t/replaceall-is-not-a-function/14585)",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "references": [
+          "https://discourse.threejs.org/t/replaceall-is-not-a-function/14585"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "pKUODv",
+            "url": "https://semgrep.dev/playground/r/l4TJKB/javascript.lang.correctness.no-replaceall.no-replaceall",
+            "version_id": "l4TJKB"
+          }
+        },
+        "shortlink": "https://sg.run/W8NE",
+        "source": "https://semgrep.dev/r/javascript.lang.correctness.no-replaceall.no-replaceall",
+        "technology": [
+          "javascript"
+        ]
+      },
+      "pattern": "$STRING.replaceAll(\"...\",$NEW)",
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.lang.maintainability.useless-innerfunction.useless-inner-function",
+      "languages": [
+        "python"
+      ],
+      "message": "function `$FF` is defined inside a function but never used",
+      "metadata": {
+        "category": "maintainability",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "bwUwkn",
+            "url": "https://semgrep.dev/playground/r/vdTBNy/python.lang.maintainability.useless-innerfunction.useless-inner-function",
+            "version_id": "vdTBNy"
+          }
+        },
+        "shortlink": "https://sg.run/XB9K",
+        "source": "https://semgrep.dev/r/python.lang.maintainability.useless-innerfunction.useless-inner-function",
+        "technology": [
+          "python"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-not-inside": "def $F(...):\n    ...\n    def $FF(...):\n       ...\n    ...\n    <... $FF ...>\n"
+        },
+        {
+          "pattern-not-inside": "def $F(...):\n    ...\n    class $CLAZZ(...):\n      ...\n"
+        },
+        {
+          "pattern-inside": "def $F(...):\n  ...\n  def $FF(...):\n     ...\n  ...\n"
+        },
+        {
+          "pattern": "def $FF(...):\n  ...\n"
+        },
+        {
+          "pattern-not": "@$DECORATOR\ndef $FF(...):\n  ...\n"
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.correctness.exceptions.exceptions.raise-not-base-exception",
+      "languages": [
+        "python"
+      ],
+      "message": "In Python3, a runtime `TypeError` will be thrown if you attempt to raise an object or class which does not inherit from `BaseException`",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "pKUOlQ",
+            "url": "https://semgrep.dev/playground/r/kbTOGn/python.lang.correctness.exceptions.exceptions.raise-not-base-exception",
+            "version_id": "kbTOGn"
+          }
+        },
+        "shortlink": "https://sg.run/qxAz",
+        "source": "https://semgrep.dev/r/python.lang.correctness.exceptions.exceptions.raise-not-base-exception",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "raise \"...\""
+        },
+        {
+          "pattern": "$X: BaseException\nraise $X(...)\n"
+        },
+        {
+          "patterns": [
+            {
+              "pattern": "raise $EXCEPTION"
+            },
+            {
+              "metavariable-regex": {
+                "metavariable": "$EXCEPTION",
+                "regex": "[0-9]*\\.?[0-9]+"
+              }
+            }
+          ]
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.maintainability.useless-ifelse.useless-if-conditional",
+      "languages": [
+        "python"
+      ],
+      "message": "if block checks for the same condition on both branches (`$X`)",
+      "metadata": {
+        "category": "maintainability",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "references": [
+          "https://docs.python.org/3/tutorial/controlflow.html"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "yyUnLW",
+            "url": "https://semgrep.dev/playground/r/pZT4Qp/python.lang.maintainability.useless-ifelse.useless-if-conditional",
+            "version_id": "pZT4Qp"
+          }
+        },
+        "shortlink": "https://sg.run/pxRg",
+        "source": "https://semgrep.dev/r/python.lang.maintainability.useless-ifelse.useless-if-conditional",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "if $X:\n    ...\nelif $X:\n    ...\n",
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.lang.maintainability.useless-ifelse.useless-if-body",
+      "languages": [
+        "python"
+      ],
+      "message": "Useless if statement; both blocks have the same body",
+      "metadata": {
+        "category": "maintainability",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "references": [
+          "https://docs.python.org/3/tutorial/controlflow.html"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "r6UrYp",
+            "url": "https://semgrep.dev/playground/r/2KTo6L/python.lang.maintainability.useless-ifelse.useless-if-body",
+            "version_id": "2KTo6L"
+          }
+        },
+        "shortlink": "https://sg.run/2xN0",
+        "source": "https://semgrep.dev/r/python.lang.maintainability.useless-ifelse.useless-if-body",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "if $X:\n    $S\nelse:\n    $S\n",
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.lang.best-practice.pass-body.pass-body-fn",
+      "languages": [
+        "python"
+      ],
+      "message": "`pass` is the body of function $X. Consider removing this or raise NotImplementedError() if this is a TODO",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "OrU3yZ",
+            "url": "https://semgrep.dev/playground/r/7ZTbRN/python.lang.best-practice.pass-body.pass-body-fn",
+            "version_id": "7ZTbRN"
+          }
+        },
+        "shortlink": "https://sg.run/ydWR",
+        "source": "https://semgrep.dev/r/python.lang.best-practice.pass-body.pass-body-fn",
+        "technology": [
+          "python"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-not-inside": "def __init__(self, ...):\n    ...\n"
+        },
+        {
+          "pattern-not-inside": "class $A:\n     ...\n"
+        },
+        {
+          "pattern": "def $X(...):\n    pass\n"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "javascript.lang.best-practice.assigned-undefined.assigned-undefined",
+      "languages": [
+        "js",
+        "ts"
+      ],
+      "message": "`undefined` is not a reserved keyword in Javascript, so this is \"valid\" Javascript but highly confusing and likely to result in bugs.",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "lBU9DN",
+            "url": "https://semgrep.dev/playground/r/YDTYBG/javascript.lang.best-practice.assigned-undefined.assigned-undefined",
+            "version_id": "YDTYBG"
+          }
+        },
+        "shortlink": "https://sg.run/GeK6",
+        "source": "https://semgrep.dev/r/javascript.lang.best-practice.assigned-undefined.assigned-undefined",
+        "technology": [
+          "javascript"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "undefined = $X;"
+        },
+        {
+          "pattern": "var undefined = $X;"
+        },
+        {
+          "pattern": "let undefined = $X;"
+        },
+        {
+          "pattern": "const undefined = $X;"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.flask.correctness.access-request-in-wrong-handler.avoid-accessing-request-in-wrong-handler",
+      "languages": [
+        "python"
+      ],
+      "message": "Accessing request object inside a route handle for HTTP GET command will throw due to missing request body.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "wdUJe5",
+            "url": "https://semgrep.dev/playground/r/PkTjry/python.flask.correctness.access-request-in-wrong-handler.avoid-accessing-request-in-wrong-handler",
+            "version_id": "PkTjry"
+          }
+        },
+        "shortlink": "https://sg.run/1ZYv",
+        "source": "https://semgrep.dev/r/python.flask.correctness.access-request-in-wrong-handler.avoid-accessing-request-in-wrong-handler",
+        "technology": [
+          "flask"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-inside": "@app.route(..., method=\"GET\")\ndef $X(...):\n  ...\n"
+        },
+        {
+          "pattern-either": [
+            {
+              "pattern": "$Y = flask.request.json\n"
+            },
+            {
+              "pattern": "$Y = flask.request.form\n"
+            },
+            {
+              "pattern": "$Y = flask.request.data\n"
+            }
+          ]
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.django.correctness.nontext-field-must-set-null-true.nontext-field-must-set-null-true",
+      "languages": [
+        "python"
+      ],
+      "message": "null=True should be set if blank=True is set on non-text fields.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "references": [
+          "https://docs.djangoproject.com/en/4.0/ref/models/fields/#null"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "yyUnJk",
+            "url": "https://semgrep.dev/playground/r/zyTLBW/python.django.correctness.nontext-field-must-set-null-true.nontext-field-must-set-null-true",
+            "version_id": "zyTLBW"
+          }
+        },
+        "shortlink": "https://sg.run/ox40",
+        "source": "https://semgrep.dev/r/python.django.correctness.nontext-field-must-set-null-true.nontext-field-must-set-null-true",
+        "technology": [
+          "django"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-inside": "class $M(...):\n  ...\n"
+        },
+        {
+          "pattern-not": "$F = django.db.models.CharField(...)"
+        },
+        {
+          "pattern-not": "$F = django.db.models.TextField(...)"
+        },
+        {
+          "pattern-not": "$F = django.db.models.SlugField(...)"
+        },
+        {
+          "pattern-not": "$F = django.db.models.EmailField(...)"
+        },
+        {
+          "pattern-not": "$F = django.db.models.FileField(...)"
+        },
+        {
+          "pattern-not": "$F = django.db.models.ImageField(...)"
+        },
+        {
+          "pattern-not": "$F = django.db.models.URLField(...)"
+        },
+        {
+          "pattern-not": "$F = django.db.models.UUIDField(...)"
+        },
+        {
+          "pattern-not": "$F = django.db.models.ManyToManyField(...)"
+        },
+        {
+          "pattern-not": "$F = django.db.models.NullBooleanField(...)"
+        },
+        {
+          "pattern-not": "$F = django.contrib.gis.db.models.$MODEL(...)"
+        },
+        {
+          "pattern-not": "$F = phonenumber_field.modelfields.PhoneNumberField(...)"
+        },
+        {
+          "pattern-not": "$F = ckeditor.fields.RichTextField(...)"
+        },
+        {
+          "pattern-not": "$F = $X(..., null=True, blank=True, ...)"
+        },
+        {
+          "pattern": "$F = $X(..., blank=True, ...)"
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "go.lang.correctness.overflow.overflow.integer-overflow-int16",
+      "languages": [
+        "go"
+      ],
+      "message": "Detected conversion of the result of a strconv.Atoi command to an int16. This could lead to an integer overflow, which could possibly result in unexpected behavior and even privilege escalation. Instead, use `strconv.ParseInt`.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "0oU5N3",
+            "url": "https://semgrep.dev/playground/r/kbTO94/go.lang.correctness.overflow.overflow.integer-overflow-int16",
+            "version_id": "kbTO94"
+          }
+        },
+        "shortlink": "https://sg.run/Klr6",
+        "source": "https://semgrep.dev/r/go.lang.correctness.overflow.overflow.integer-overflow-int16",
+        "technology": [
+          "go"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern": "$F, $ERR := strconv.Atoi($NUM)\n...\nint16($F)\n"
+        },
+        {
+          "metavariable-comparison": {
+            "comparison": "$NUM > 32767 or $NUM < -32768",
+            "metavariable": "$NUM",
+            "strip": true
+          }
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.lang.correctness.useless-eqeq.useless-eqeq",
+      "languages": [
+        "python"
+      ],
+      "message": "This expression is always True: `$X == $X` or `$X != $X`. If testing for floating point NaN, use `math.isnan($X)`, or `cmath.isnan($X)` if the number is complex.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "0oU5Ol",
+            "url": "https://semgrep.dev/playground/r/l4TZ3Q/python.lang.correctness.useless-eqeq.useless-eqeq",
+            "version_id": "l4TZ3Q"
+          }
+        },
+        "shortlink": "https://sg.run/GeAp",
+        "source": "https://semgrep.dev/r/python.lang.correctness.useless-eqeq.useless-eqeq",
+        "technology": [
+          "python"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-not-inside": "def __eq__(...):\n    ...\n"
+        },
+        {
+          "pattern-not-inside": "def __cmp__(...):\n    ...\n"
+        },
+        {
+          "pattern-not-inside": "assert(...)"
+        },
+        {
+          "pattern-not-inside": "assert ..., ..."
+        },
+        {
+          "pattern-not-inside": "assertTrue(...)"
+        },
+        {
+          "pattern-not-inside": "assertFalse(...)"
+        },
+        {
+          "pattern-either": [
+            {
+              "pattern": "$X == $X"
+            },
+            {
+              "pattern": "$X != $X"
+            }
+          ]
+        },
+        {
+          "pattern-not": "1 == 1"
+        }
+      ],
+      "severity": "INFO"
+    },
+    {
+      "id": "python.lang.maintainability.return.return-not-in-function",
+      "languages": [
+        "python"
+      ],
+      "message": "`return` only makes sense inside a function",
+      "metadata": {
+        "category": "maintainability",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "10UKxW",
+            "url": "https://semgrep.dev/playground/r/PkTjyB/python.lang.maintainability.return.return-not-in-function",
+            "version_id": "PkTjyB"
+          }
+        },
+        "shortlink": "https://sg.run/oxG9",
+        "source": "https://semgrep.dev/r/python.lang.maintainability.return.return-not-in-function",
+        "technology": [
+          "python"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-not-inside": "def $F(...):\n    ...\n# TODO: first pattern should just automatically include this one\n"
+        },
+        {
+          "pattern-not-inside": "def $F(...) ->  $Y:\n    ...\n"
+        },
+        {
+          "pattern": "return ..."
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.lang.correctness.baseclass-attribute-override.baseclass-attribute-override",
+      "languages": [
+        "python"
+      ],
+      "message": "Class $C inherits from both `$A` and `$B` which both have a method named `$F`; one of these methods will be overwritten.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "references": [
+          "https://docs.python.org/3/tutorial/classes.html#multiple-inheritance"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "qNUjq2",
+            "url": "https://semgrep.dev/playground/r/jQT1ev/python.lang.correctness.baseclass-attribute-override.baseclass-attribute-override",
+            "version_id": "jQT1ev"
+          }
+        },
+        "shortlink": "https://sg.run/Roze",
+        "source": "https://semgrep.dev/r/python.lang.correctness.baseclass-attribute-override.baseclass-attribute-override",
+        "technology": [
+          "python"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-inside": "class $A(...):\n  ...\n  def $F(...):\n    ...\n  ...\n...\n"
+        },
+        {
+          "pattern-inside": "class $B(...):\n  ...\n  def $F(...):\n    ...\n  ...\n...\n"
+        },
+        {
+          "pattern": "class $C(..., $A, ..., $B, ...):\n  ...\n"
+        },
+        {
+          "focus-metavariable": "$C"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "javascript.lang.best-practice.leftover_debugging.javascript-alert",
+      "languages": [
+        "js",
+        "ts"
+      ],
+      "message": "found alert() call; should this be in production code?",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "YGURbz",
+            "url": "https://semgrep.dev/playground/r/o5TKOp/javascript.lang.best-practice.leftover_debugging.javascript-alert",
+            "version_id": "o5TKOp"
+          }
+        },
+        "shortlink": "https://sg.run/Ro1N",
+        "source": "https://semgrep.dev/r/javascript.lang.best-practice.leftover_debugging.javascript-alert",
+        "technology": [
+          "javascript"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "alert()"
+        },
+        {
+          "pattern": "alert($X)"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "ocaml.lang.correctness.useless_let.useless-let",
+      "languages": [
+        "ocaml"
+      ],
+      "message": "Useless let",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "GdU7RP",
+            "url": "https://semgrep.dev/playground/r/BjT7nb/ocaml.lang.correctness.useless_let.useless-let",
+            "version_id": "BjT7nb"
+          }
+        },
+        "shortlink": "https://sg.run/LwDY",
+        "source": "https://semgrep.dev/r/ocaml.lang.correctness.useless_let.useless-let"
+      },
+      "pattern": "let $X = $E in $X",
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.django.best-practice.json_response.use-json-response",
+      "languages": [
+        "python"
+      ],
+      "message": "Use JsonResponse instead",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "6JUjYX",
+            "url": "https://semgrep.dev/playground/r/DkT2rd/python.django.best-practice.json_response.use-json-response",
+            "version_id": "DkT2rd"
+          }
+        },
+        "shortlink": "https://sg.run/BkQA",
+        "source": "https://semgrep.dev/r/python.django.best-practice.json_response.use-json-response",
+        "technology": [
+          "django"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-inside": "def $X(...):\n  ...\n"
+        },
+        {
+          "pattern": "$Y = json.dumps(...)\n...\ndjango.http.HttpResponse($Y, ...)\n"
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.correctness.tempfile.flush.tempfile-without-flush",
+      "languages": [
+        "python"
+      ],
+      "message": "Using '$F.name' without '.flush()' or '.close()' may cause an error because the file may not exist when '$F.name' is used. Use '.flush()' or close the file before using '$F.name'.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "2ZUb0A",
+            "url": "https://semgrep.dev/playground/r/nWTnL7/python.lang.correctness.tempfile.flush.tempfile-without-flush",
+            "version_id": "nWTnL7"
+          }
+        },
+        "shortlink": "https://sg.run/l23y",
+        "source": "https://semgrep.dev/r/python.lang.correctness.tempfile.flush.tempfile-without-flush",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern-either": [
+        {
+          "patterns": [
+            {
+              "pattern-not-inside": "$F = tempfile.NamedTemporaryFile(...)\n...\n$F.write(...)\n...\n$F.flush()\n...\n$F.name\n"
+            },
+            {
+              "pattern-not-inside": "$F = tempfile.NamedTemporaryFile(...)\n...\n$F.write(...)\n...\n$F.close()\n...\n$F.name\n"
+            },
+            {
+              "pattern-not-inside": "$F = tempfile.NamedTemporaryFile(..., delete=False, ...)\n...\n$F.close()\n...\n$F.name\n"
+            },
+            {
+              "pattern-inside": "$F = tempfile.NamedTemporaryFile(...)\n...\n"
+            },
+            {
+              "pattern": "$F.name\n"
+            }
+          ]
+        },
+        {
+          "patterns": [
+            {
+              "pattern-not-inside": "with tempfile.NamedTemporaryFile(...) as $F:\n    ...\n    $F.write(...)\n    ...\n    $F.flush()\n    ...\n    $F.name\n"
+            },
+            {
+              "pattern-not-inside": "with tempfile.NamedTemporaryFile(...) as $F:\n    ...\n    $F.write(...)\n    ...\n    $F.close()\n    ...\n    $F.name\n"
+            },
+            {
+              "pattern-not-inside": "with tempfile.NamedTemporaryFile(...) as $F:\n    ...\n    $MODULE.dump(..., $F, ...)\n    ...\n    $F.flush()\n    ...\n    $F.name\n"
+            },
+            {
+              "pattern-not-inside": "with tempfile.NamedTemporaryFile(...) as $F:\n    ...\n    $MODULE.dump(..., $F, ...)\n    ...\n    $F.close()\n    ...\n    $F.name\n"
+            },
+            {
+              "pattern-inside": "with tempfile.NamedTemporaryFile(...) as $F:\n    ...\n"
+            },
+            {
+              "pattern": "$F.name\n"
+            }
+          ]
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "javascript.lang.best-practice.leftover_debugging.javascript-debugger",
+      "languages": [
+        "js",
+        "ts"
+      ],
+      "message": "found debugger call; should this be in production code?",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "6JUjXk",
+            "url": "https://semgrep.dev/playground/r/zyTGOw/javascript.lang.best-practice.leftover_debugging.javascript-debugger",
+            "version_id": "zyTGOw"
+          }
+        },
+        "shortlink": "https://sg.run/AvRB",
+        "source": "https://semgrep.dev/r/javascript.lang.best-practice.leftover_debugging.javascript-debugger",
+        "technology": [
+          "javascript"
+        ]
+      },
+      "pattern": "debugger;",
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.lang.correctness.writing-to-file-in-read-mode.writing-to-file-in-read-mode",
+      "languages": [
+        "python"
+      ],
+      "message": "The file object '$FD' was opened in read mode, but is being written to. This will cause a runtime error.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "KxUbyG",
+            "url": "https://semgrep.dev/playground/r/gETkD6/python.lang.correctness.writing-to-file-in-read-mode.writing-to-file-in-read-mode",
+            "version_id": "gETkD6"
+          }
+        },
+        "shortlink": "https://sg.run/RozO",
+        "source": "https://semgrep.dev/r/python.lang.correctness.writing-to-file-in-read-mode.writing-to-file-in-read-mode",
+        "technology": [
+          "python"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-either": [
+            {
+              "pattern-inside": "$FD = open($NAME, \"r\", ...)\n...\n"
+            },
+            {
+              "pattern-inside": "$FD = open($NAME, \"rb\", ...)\n...\n"
+            },
+            {
+              "pattern-inside": "with open($NAME, \"r\", ...) as $FD:\n  ...\n"
+            },
+            {
+              "pattern-inside": "with open($NAME, \"rb\", ...) as $FD:\n  ...\n"
+            }
+          ]
+        },
+        {
+          "pattern": "$FD.write(...)"
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.compatibility.python36.python36-compatibility-ssl",
+      "languages": [
+        "python"
+      ],
+      "message": "this function is only available on Python 3.6+",
+      "metadata": {
+        "category": "compatibility",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "ZqU5wR",
+            "url": "https://semgrep.dev/playground/r/3ZTLXP/python.lang.compatibility.python36.python36-compatibility-ssl",
+            "version_id": "3ZTLXP"
+          }
+        },
+        "shortlink": "https://sg.run/kXn2",
+        "source": "https://semgrep.dev/r/python.lang.compatibility.python36.python36-compatibility-ssl",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "ssl.get_ciphers()",
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.best-practice.pass-body.pass-body-range",
+      "languages": [
+        "python"
+      ],
+      "message": "`pass` is the body of for $X in $Y. Consider removing this or raise NotImplementedError() if this is a TODO",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "eqU8xE",
+            "url": "https://semgrep.dev/playground/r/LjTzgN/python.lang.best-practice.pass-body.pass-body-range",
+            "version_id": "LjTzgN"
+          }
+        },
+        "shortlink": "https://sg.run/rdJR",
+        "source": "https://semgrep.dev/r/python.lang.best-practice.pass-body.pass-body-range",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "for $X in $Y:\n    pass\n",
+      "severity": "WARNING"
+    },
+    {
+      "id": "go.lang.correctness.useless-eqeq.hardcoded-eq-true-or-false",
+      "languages": [
+        "go"
+      ],
+      "message": "Detected useless if statement. 'if (True)' and 'if (False)' always result in the same behavior, and therefore is not necessary in the code. Remove the 'if (False)' expression completely or just the 'if (True)' comparison depending on which expression is in the code.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "WAUoBp",
+            "url": "https://semgrep.dev/playground/r/e1TZYL/go.lang.correctness.useless-eqeq.hardcoded-eq-true-or-false",
+            "version_id": "e1TZYL"
+          }
+        },
+        "shortlink": "https://sg.run/0QkJ",
+        "source": "https://semgrep.dev/r/go.lang.correctness.useless-eqeq.hardcoded-eq-true-or-false",
+        "technology": [
+          "go"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "if (true) { ... }"
+        },
+        {
+          "pattern": "if (false) { ... }"
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.correctness.common-mistakes.string-concat-in-list.string-concat-in-list",
+      "languages": [
+        "python"
+      ],
+      "message": "Detected strings that are implicitly concatenated inside a list. Python will implicitly concatenate strings when not explicitly delimited. Was this supposed to be individual elements of the list?",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "zdUkRQ",
+            "url": "https://semgrep.dev/playground/r/rxTjKd/python.lang.correctness.common-mistakes.string-concat-in-list.string-concat-in-list",
+            "version_id": "rxTjKd"
+          }
+        },
+        "shortlink": "https://sg.run/Kl07",
+        "source": "https://semgrep.dev/r/python.lang.correctness.common-mistakes.string-concat-in-list.string-concat-in-list",
+        "technology": [
+          "python"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-either": [
+            {
+              "pattern-inside": "[...]"
+            },
+            {
+              "pattern-inside": "{...}"
+            }
+          ]
+        },
+        {
+          "pattern": "\"...\" \"...\""
+        },
+        {
+          "pattern-not-inside": "f\"...\""
+        },
+        {
+          "pattern-not-inside": "{..., $KEY: $VALUE, ...}"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "javascript.lang.best-practice.leftover_debugging.javascript-confirm",
+      "languages": [
+        "js",
+        "ts"
+      ],
+      "message": "found confirm() call; should this be in production code?",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "oqUe1G",
+            "url": "https://semgrep.dev/playground/r/YDTw0r/javascript.lang.best-practice.leftover_debugging.javascript-confirm",
+            "version_id": "YDTw0r"
+          }
+        },
+        "shortlink": "https://sg.run/BkAR",
+        "source": "https://semgrep.dev/r/javascript.lang.best-practice.leftover_debugging.javascript-confirm",
+        "technology": [
+          "javascript"
+        ]
+      },
+      "pattern": "confirm(...)",
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.lang.correctness.useless-comparison.no-strings-as-booleans",
+      "languages": [
+        "python"
+      ],
+      "message": "Using strings as booleans in Python has unexpected results. `\"one\" and \"two\"` will return \"two\". `\"one\" or \"two\"` will return \"one\". In Python, strings are truthy, and strings with a non-zero length evaluate to True.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "WAUoxE",
+            "url": "https://semgrep.dev/playground/r/LjTz3N/python.lang.correctness.useless-comparison.no-strings-as-booleans",
+            "version_id": "LjTz3N"
+          }
+        },
+        "shortlink": "https://sg.run/5QxA",
+        "source": "https://semgrep.dev/r/python.lang.correctness.useless-comparison.no-strings-as-booleans",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "if <... \"...\" and ... ...>:\n    ...\n"
+        },
+        {
+          "pattern": "if <... \"...\" or ... ...>:\n    ...\n"
+        },
+        {
+          "patterns": [
+            {
+              "pattern-not": "if $X in \"...\":\n  ...\n"
+            },
+            {
+              "pattern": "if \"...\":\n    ...\n"
+            }
+          ]
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.compatibility.python37.python37-compatibility-importlib3",
+      "languages": [
+        "python"
+      ],
+      "message": "Found usage of 'importlib.abc.ResourceReader'. This module is only available on Python 3.7+ and is therefore not backwards compatible. Instead, use another loader.",
+      "metadata": {
+        "category": "compatibility",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "QrUzJ9",
+            "url": "https://semgrep.dev/playground/r/A8TNdJ/python.lang.compatibility.python37.python37-compatibility-importlib3",
+            "version_id": "A8TNdJ"
+          }
+        },
+        "shortlink": "https://sg.run/Zv2o",
+        "source": "https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-importlib3",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "import importlib.abc.ResourceReader",
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.compatibility.python37.python37-compatibility-os1",
+      "languages": [
+        "python"
+      ],
+      "message": "os.preadv() is only available on Python 3.7+ and is therefore not backwards compatible. Instead, use a combination of os.readv() and os.pread().",
+      "metadata": {
+        "category": "compatibility",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "DbUpQQ",
+            "url": "https://semgrep.dev/playground/r/o5TKDW/python.lang.compatibility.python37.python37-compatibility-os1",
+            "version_id": "o5TKDW"
+          }
+        },
+        "shortlink": "https://sg.run/PJWW",
+        "source": "https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-os1",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "os.preadv(...)",
+      "severity": "ERROR"
+    },
+    {
+      "id": "javascript.lang.best-practice.leftover_debugging.javascript-prompt",
+      "languages": [
+        "js",
+        "ts"
+      ],
+      "message": "found prompt() call; should this be in production code?",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "zdUk3g",
+            "url": "https://semgrep.dev/playground/r/2KTdZe/javascript.lang.best-practice.leftover_debugging.javascript-prompt",
+            "version_id": "2KTdZe"
+          }
+        },
+        "shortlink": "https://sg.run/DoDG",
+        "source": "https://semgrep.dev/r/javascript.lang.best-practice.leftover_debugging.javascript-prompt",
+        "technology": [
+          "javascript"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "prompt()"
+        },
+        {
+          "pattern": "prompt($X)"
+        },
+        {
+          "pattern": "prompt($X, $Y)"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.lang.best-practice.pdb.python-debugger-found",
+      "languages": [
+        "python"
+      ],
+      "message": "Importing the python debugger; did you mean to leave this in?",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "v8Un2J",
+            "url": "https://semgrep.dev/playground/r/8KTvrQ/python.lang.best-practice.pdb.python-debugger-found",
+            "version_id": "8KTvrQ"
+          }
+        },
+        "shortlink": "https://sg.run/b7NE",
+        "source": "https://semgrep.dev/r/python.lang.best-practice.pdb.python-debugger-found",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "import pdb"
+        },
+        {
+          "pattern": "pdb.set_trace()"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "ocaml.lang.best-practice.string.ocamllint-str-string-after",
+      "languages": [
+        "ocaml"
+      ],
+      "message": "Use instead `Str.string_after`",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "8GUjZq",
+            "url": "https://semgrep.dev/playground/r/zyTGox/ocaml.lang.best-practice.string.ocamllint-str-string-after",
+            "version_id": "zyTGox"
+          }
+        },
+        "shortlink": "https://sg.run/OPKk",
+        "source": "https://semgrep.dev/r/ocaml.lang.best-practice.string.ocamllint-str-string-after",
+        "technology": [
+          "ocaml"
+        ]
+      },
+      "pattern": "String.sub $S $N (String.length $S - $N)",
+      "severity": "WARNING"
+    },
+    {
+      "id": "ocaml.lang.best-practice.ref.ocamllint-ref-decr",
+      "languages": [
+        "ocaml"
+      ],
+      "message": "You should use `decr`",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "references": [
+          "https://v2.ocaml.org/api/Stdlib.html#VALdecr",
+          "https://v2.ocaml.org/api/Atomic.html#VALdecr"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "7KUQyg",
+            "url": "https://semgrep.dev/playground/r/2KToEg/ocaml.lang.best-practice.ref.ocamllint-ref-decr",
+            "version_id": "2KToEg"
+          }
+        },
+        "shortlink": "https://sg.run/weYd",
+        "source": "https://semgrep.dev/r/ocaml.lang.best-practice.ref.ocamllint-ref-decr",
+        "technology": [
+          "ocaml"
+        ]
+      },
+      "pattern": "$X := ! $X - 1",
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.lang.compatibility.python37.python37-compatibility-multiprocess1",
+      "languages": [
+        "python"
+      ],
+      "message": "multiprocessing.Process.close() is only available on Python 3.7+ and is therefore not backwards compatible. Instead, use join().",
+      "metadata": {
+        "category": "compatibility",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "AbUzRA",
+            "url": "https://semgrep.dev/playground/r/YDTYeO/python.lang.compatibility.python37.python37-compatibility-multiprocess1",
+            "version_id": "YDTYeO"
+          }
+        },
+        "shortlink": "https://sg.run/3xjp",
+        "source": "https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-multiprocess1",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "multiprocessing.Process.close()",
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.compatibility.python37.python37-compatibility-math1",
+      "languages": [
+        "python"
+      ],
+      "message": "math.remainder is only available on Python 3.7+ and is therefore not backwards compatible. Instead, use math.fmod() or calculate $X - n* $Y.",
+      "metadata": {
+        "category": "compatibility",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "ReUgbz",
+            "url": "https://semgrep.dev/playground/r/l4TXR1/python.lang.compatibility.python37.python37-compatibility-math1",
+            "version_id": "l4TXR1"
+          }
+        },
+        "shortlink": "https://sg.run/Q50Q",
+        "source": "https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-math1",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "math.remainder($X, $Y)",
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.best-practice.missing-hash-with-eq.missing-hash-with-eq",
+      "languages": [
+        "python"
+      ],
+      "message": "Class `$A` has defined `__eq__` which means it should also have defined `__hash__`; ",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "wdUJ35",
+            "url": "https://semgrep.dev/playground/r/nWTnN7/python.lang.best-practice.missing-hash-with-eq.missing-hash-with-eq",
+            "version_id": "nWTnN7"
+          }
+        },
+        "shortlink": "https://sg.run/1Z2v",
+        "source": "https://semgrep.dev/r/python.lang.best-practice.missing-hash-with-eq.missing-hash-with-eq",
+        "technology": [
+          "python"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-not-inside": "class A(...):\n    ...\n    def __hash__(self):\n        ...\n    ...\n    def __eq__(self, $O):\n        ...\n"
+        },
+        {
+          "pattern": "class A(...):\n  ...\n  def __eq__(self, $O): ...\n  ...\n"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "ocaml.lang.best-practice.ref.ocamllint-ref-incr",
+      "languages": [
+        "ocaml"
+      ],
+      "message": "You should use `incr`",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "references": [
+          "https://v2.ocaml.org/api/Stdlib.html#VALincr",
+          "https://v2.ocaml.org/api/Atomic.html#VALincr"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "EwU2w8",
+            "url": "https://semgrep.dev/playground/r/pZT4AW/ocaml.lang.best-practice.ref.ocamllint-ref-incr",
+            "version_id": "pZT4AW"
+          }
+        },
+        "shortlink": "https://sg.run/kXJA",
+        "source": "https://semgrep.dev/r/ocaml.lang.best-practice.ref.ocamllint-ref-incr",
+        "technology": [
+          "ocaml"
+        ]
+      },
+      "pattern": "$X := ! $X + 1",
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.flask.best-practice.get-class-method-with-side-effects.flask-class-method-get-side-effects",
+      "languages": [
+        "python"
+      ],
+      "message": "Flask class method GET with side effects",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "bwUwYZ",
+            "url": "https://semgrep.dev/playground/r/QkT1rr/python.flask.best-practice.get-class-method-with-side-effects.flask-class-method-get-side-effects",
+            "version_id": "QkT1rr"
+          }
+        },
+        "shortlink": "https://sg.run/2x6D",
+        "source": "https://semgrep.dev/r/python.flask.best-practice.get-class-method-with-side-effects.flask-class-method-get-side-effects",
+        "technology": [
+          "flask"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-either": [
+            {
+              "pattern": "def get(self,...):\n    ...\n    $METHOD(...)\n"
+            },
+            {
+              "pattern": "def get(self,...):\n    ...\n    $VAR = $METHOD(...)\n"
+            }
+          ]
+        },
+        {
+          "metavariable-regex": {
+            "metavariable": "$METHOD",
+            "regex": "(?i)(create|update|delete).*"
+          }
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "ocaml.lang.correctness.physical_vs_structural.physical-equal",
+      "languages": [
+        "ocaml"
+      ],
+      "message": "You probably want the structural inequality operator =",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "4bUkd1",
+            "url": "https://semgrep.dev/playground/r/5PT829/ocaml.lang.correctness.physical_vs_structural.physical-equal",
+            "version_id": "5PT829"
+          }
+        },
+        "shortlink": "https://sg.run/Zv14",
+        "source": "https://semgrep.dev/r/ocaml.lang.correctness.physical_vs_structural.physical-equal"
+      },
+      "pattern": "$X == $Y",
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.lang.best-practice.sleep.arbitrary-sleep",
+      "languages": [
+        "python"
+      ],
+      "message": "time.sleep() call; did you mean to leave this in?",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "d8UjDO",
+            "url": "https://semgrep.dev/playground/r/gETk76/python.lang.best-practice.sleep.arbitrary-sleep",
+            "version_id": "gETk76"
+          }
+        },
+        "shortlink": "https://sg.run/N4Bz",
+        "source": "https://semgrep.dev/r/python.lang.best-practice.sleep.arbitrary-sleep",
+        "technology": [
+          "python"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-not": "time.sleep($F(...))"
+        },
+        {
+          "pattern-either": [
+            {
+              "pattern": "time.sleep($X: int)\n"
+            },
+            {
+              "pattern": "time.sleep($X: float)\n"
+            }
+          ]
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.correctness.common-mistakes.is-not-is-not.is-not-is-not",
+      "languages": [
+        "python"
+      ],
+      "message": "In Python 'X is not ...' is different from 'X is (not ...)'. In the latter the 'not' converts the '...' directly to boolean.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "oqUexJ",
+            "url": "https://semgrep.dev/playground/r/yeTDp8/python.lang.correctness.common-mistakes.is-not-is-not.is-not-is-not",
+            "version_id": "yeTDp8"
+          }
+        },
+        "shortlink": "https://sg.run/0Qrv",
+        "source": "https://semgrep.dev/r/python.lang.correctness.common-mistakes.is-not-is-not.is-not-is-not",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "$S is (not ...)",
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.maintainability.useless-literal.useless-literal-dict",
+      "languages": [
+        "python"
+      ],
+      "message": "key `$X` is uselessly assigned twice",
+      "metadata": {
+        "category": "maintainability",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "NbUkOL",
+            "url": "https://semgrep.dev/playground/r/A8TN2J/python.lang.maintainability.useless-literal.useless-literal-dict",
+            "version_id": "A8TN2J"
+          }
+        },
+        "shortlink": "https://sg.run/jRgY",
+        "source": "https://semgrep.dev/r/python.lang.maintainability.useless-literal.useless-literal-dict",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "{..., $X: $A, ..., $X: $B, ...}\n"
+        },
+        {
+          "pattern": "dict(..., ($X, $A), ..., ($X, $B), ...)\n"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.lang.correctness.common-mistakes.is-comparison-string.string-is-comparison",
+      "languages": [
+        "python"
+      ],
+      "message": "Found string comparison using 'is' operator. The 'is' operator is for reference equality, not value equality, and therefore should not be used to compare strings. For more information, see https://github.com/satwikkansal/wtfpython#-how-not-to-use-is-operator\"",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "6JUjKG",
+            "url": "https://semgrep.dev/playground/r/9lTAbv/python.lang.correctness.common-mistakes.is-comparison-string.string-is-comparison",
+            "version_id": "9lTAbv"
+          }
+        },
+        "shortlink": "https://sg.run/W814",
+        "source": "https://semgrep.dev/r/python.lang.correctness.common-mistakes.is-comparison-string.string-is-comparison",
+        "technology": [
+          "python"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-not": "$S is None"
+        },
+        {
+          "pattern-not": "type($X) is $T"
+        },
+        {
+          "pattern-not": "$S is True"
+        },
+        {
+          "pattern-not": "$S is False"
+        },
+        {
+          "pattern-not": "$S is \"\""
+        },
+        {
+          "pattern-either": [
+            {
+              "pattern": "$S is \"...\""
+            },
+            {
+              "pattern": "\"...\" is $S"
+            }
+          ]
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "ocaml.lang.correctness.useless_eq.useless-equal",
+      "languages": [
+        "ocaml"
+      ],
+      "message": "This is always true. If testing for floating point NaN, use `Float.is_nan` instead.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "JDUyjl",
+            "url": "https://semgrep.dev/playground/r/RGToZR/ocaml.lang.correctness.useless_eq.useless-equal",
+            "version_id": "RGToZR"
+          }
+        },
+        "shortlink": "https://sg.run/EkPB",
+        "source": "https://semgrep.dev/r/ocaml.lang.correctness.useless_eq.useless-equal"
+      },
+      "pattern": "$X = $X",
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.django.correctness.string-field-null-checks.no-null-string-field",
+      "languages": [
+        "python"
+      ],
+      "message": "Avoid using null on string-based fields such as CharField and TextField. If a string-based field has null=True, that means it has two possible values for \"no data\": NULL, and the empty string. In most cases, it's redundant to have two possible values for \"no data;\" the Django convention is to use the empty string, not NULL.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "r6UrZy",
+            "url": "https://semgrep.dev/playground/r/pZTb7b/python.django.correctness.string-field-null-checks.no-null-string-field",
+            "version_id": "pZTb7b"
+          }
+        },
+        "shortlink": "https://sg.run/zvKd",
+        "source": "https://semgrep.dev/r/python.django.correctness.string-field-null-checks.no-null-string-field",
+        "technology": [
+          "django"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-inside": "class $M(...):\n  ...\n"
+        },
+        {
+          "pattern-not": "$F = django.db.models.CharField(..., null=True, unique=True, blank=True, ...)"
+        },
+        {
+          "pattern-not": "$F = django.db.models.TextField(..., null=True, unique=True, blank=True, ...)"
+        },
+        {
+          "pattern-either": [
+            {
+              "pattern": "$F = django.db.models.CharField(..., null=True, ...)"
+            },
+            {
+              "pattern": "$F = django.db.models.TextField(..., null=True, ...)"
+            }
+          ]
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.lang.best-practice.manual-collections-create.manual-defaultdict-dict-create",
+      "languages": [
+        "python"
+      ],
+      "message": "manually creating a defaultdict - use collections.defaultdict(dict)",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "r6UrxA",
+            "url": "https://semgrep.dev/playground/r/e1TZKO/python.lang.best-practice.manual-collections-create.manual-defaultdict-dict-create",
+            "version_id": "e1TZKO"
+          }
+        },
+        "shortlink": "https://sg.run/px4L",
+        "source": "https://semgrep.dev/r/python.lang.best-practice.manual-collections-create.manual-defaultdict-dict-create",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "$DICT = {}\n...\nfor $KEY, $VALUE in $OTHERDICT.items():\n    ...\n    if $KEY not in $DICT:\n        ...\n        $DICT[$KEY] = {}\n        ...\n    $DICT[$KEY].update(...)\n"
+        },
+        {
+          "pattern": "$DICT = {}\n...\nfor $KEY, $VALUE in $OTHERDICT.items():\n    ...\n    $DICT.setdefault($KEY, {}).update(...)\n"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.lang.compatibility.python37.python37-compatibility-ipv6network1",
+      "languages": [
+        "python"
+      ],
+      "message": "IPv6Network.subnet_of is only available on Python 3.7+ and is therefore not backwards compatible. Instead, check if the subnet is in 'subnets'.",
+      "metadata": {
+        "category": "compatibility",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "4bUko0",
+            "url": "https://semgrep.dev/playground/r/DkT2bY/python.lang.compatibility.python37.python37-compatibility-ipv6network1",
+            "version_id": "DkT2bY"
+          }
+        },
+        "shortlink": "https://sg.run/EkLe",
+        "source": "https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-ipv6network1",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "ipaddress.IPv6Network.subnet_of($X)",
+      "severity": "ERROR"
+    },
+    {
+      "fix": "sys.exit($X)",
+      "id": "python.lang.correctness.exit.use-sys-exit",
+      "languages": [
+        "python"
+      ],
+      "message": "Detected use of `exit`. Use `sys.exit` over the python shell `exit` built-in. `exit` is a helper for the interactive shell and may not be available on all Python implementations.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "references": [
+          "https://stackoverflow.com/questions/6501121/difference-between-exit-and-sys-exit-in-python"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "JDUygy",
+            "url": "https://semgrep.dev/playground/r/NdTEGz/python.lang.correctness.exit.use-sys-exit",
+            "version_id": "NdTEGz"
+          }
+        },
+        "shortlink": "https://sg.run/Do5o",
+        "source": "https://semgrep.dev/r/python.lang.correctness.exit.use-sys-exit",
+        "technology": [
+          "python"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern": "exit($X)"
+        },
+        {
+          "pattern-not": "sys.exit($X)"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "ocaml.lang.best-practice.ifs.ocamllint-backwards-if",
+      "languages": [
+        "ocaml"
+      ],
+      "message": "Backwards if. Rewrite the code as 'if not $E then $E2'.",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "ZqU5AE",
+            "url": "https://semgrep.dev/playground/r/qkTp6w/ocaml.lang.best-practice.ifs.ocamllint-backwards-if",
+            "version_id": "qkTp6w"
+          }
+        },
+        "shortlink": "https://sg.run/b7Ov",
+        "source": "https://semgrep.dev/r/ocaml.lang.best-practice.ifs.ocamllint-backwards-if",
+        "technology": [
+          "ocaml"
+        ]
+      },
+      "pattern": "if $E then () else $E2",
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.lang.compatibility.python37.python37-compatibility-httpconn",
+      "languages": [
+        "python"
+      ],
+      "message": "Found usage of the 'blocksize' argument in a HTTPConnection call. This is only available on Python 3.7+ and is therefore not backwards compatible. Remove this in order for this code to work in Python 3.6 and below.",
+      "metadata": {
+        "category": "compatibility",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "8GUjbX",
+            "url": "https://semgrep.dev/playground/r/GxToeD/python.lang.compatibility.python37.python37-compatibility-httpconn",
+            "version_id": "GxToeD"
+          }
+        },
+        "shortlink": "https://sg.run/vzAb",
+        "source": "https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-httpconn",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "http.client.HTTPConnection(blocksize=$X,...)",
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.click.best-practice.echo-style.use-click-secho",
+      "languages": [
+        "python"
+      ],
+      "message": "Use `click.secho($X)` instead. It combines click.echo() and click.style().",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "GdU7AO",
+            "url": "https://semgrep.dev/playground/r/0bTpjP/python.click.best-practice.echo-style.use-click-secho",
+            "version_id": "0bTpjP"
+          }
+        },
+        "shortlink": "https://sg.run/8ywN",
+        "source": "https://semgrep.dev/r/python.click.best-practice.echo-style.use-click-secho",
+        "technology": [
+          "click"
+        ]
+      },
+      "pattern": "click.echo(click.style($X, ...))",
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.best-practice.manual-collections-create.manual-defaultdict-set-create",
+      "languages": [
+        "python"
+      ],
+      "message": "manually creating a defaultdict - use collections.defaultdict(set)",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "bwUwGZ",
+            "url": "https://semgrep.dev/playground/r/vdTvQP/python.lang.best-practice.manual-collections-create.manual-defaultdict-set-create",
+            "version_id": "vdTvQP"
+          }
+        },
+        "shortlink": "https://sg.run/2xXD",
+        "source": "https://semgrep.dev/r/python.lang.best-practice.manual-collections-create.manual-defaultdict-set-create",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "$DICT = {}\n...\nfor $KEY, $VALUE in $OTHERDICT.items():\n    ...\n    if $KEY not in $DICT:\n        ...\n        $DICT[$KEY] = set()\n        ...\n    $DICT[$KEY].add(...)\n"
+        },
+        {
+          "pattern": "$DICT = {}\n...\nfor $KEY, $VALUE in $OTHERDICT.items():\n    ...\n    $DICT.setdefault($KEY, set()).add(...)\n"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "ocaml.lang.best-practice.string.ocamllint-str-last-chars",
+      "languages": [
+        "ocaml"
+      ],
+      "message": "Use instead `Str.last_chars`",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "gxU1D1",
+            "url": "https://semgrep.dev/playground/r/pZTbZr/ocaml.lang.best-practice.string.ocamllint-str-last-chars",
+            "version_id": "pZTbZr"
+          }
+        },
+        "shortlink": "https://sg.run/eLvL",
+        "source": "https://semgrep.dev/r/ocaml.lang.best-practice.string.ocamllint-str-last-chars",
+        "technology": [
+          "ocaml"
+        ]
+      },
+      "pattern": "String.sub $S (String.length $S - $N) $N",
+      "severity": "WARNING"
+    },
+    {
+      "id": "ocaml.lang.compatibility.deprecated.deprecated-pervasives",
+      "languages": [
+        "ocaml"
+      ],
+      "message": "Pervasives is deprecated and will not be available after 4.10. Use Stdlib.",
+      "metadata": {
+        "category": "compatibility",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "3qUP1E",
+            "url": "https://semgrep.dev/playground/r/X0TADB/ocaml.lang.compatibility.deprecated.deprecated-pervasives",
+            "version_id": "X0TADB"
+          }
+        },
+        "shortlink": "https://sg.run/dKe0",
+        "source": "https://semgrep.dev/r/ocaml.lang.compatibility.deprecated.deprecated-pervasives",
+        "technology": [
+          "ocaml"
+        ]
+      },
+      "pattern": "Pervasives.$X",
+      "severity": "ERROR"
+    },
+    {
+      "id": "ocaml.lang.best-practice.string.ocamllint-str-first-chars",
+      "languages": [
+        "ocaml"
+      ],
+      "message": "Use instead `Str.first_chars`",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "L1Uy37",
+            "url": "https://semgrep.dev/playground/r/o5TKq0/ocaml.lang.best-practice.string.ocamllint-str-first-chars",
+            "version_id": "o5TKq0"
+          }
+        },
+        "shortlink": "https://sg.run/x16y",
+        "source": "https://semgrep.dev/r/ocaml.lang.best-practice.string.ocamllint-str-first-chars",
+        "technology": [
+          "ocaml"
+        ]
+      },
+      "pattern": "String.sub $S 0 $N",
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.requests.best-practice.use-raise-for-status.use-raise-for-status",
+      "languages": [
+        "python"
+      ],
+      "message": "There's an HTTP request made with requests, but the raise_for_status() utility method isn't used. This can result in request errors going unnoticed and your code behaving in unexpected ways, such as if your authorization API returns a 500 error while you're only checking for a 401.",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "references": [
+          "https://requests.readthedocs.io/en/master/api/#requests.Response.raise_for_status"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "DbUWd2",
+            "url": "https://semgrep.dev/playground/r/yeTxKp/python.requests.best-practice.use-raise-for-status.use-raise-for-status",
+            "version_id": "yeTxKp"
+          }
+        },
+        "shortlink": "https://sg.run/J3Xw",
+        "source": "https://semgrep.dev/r/python.requests.best-practice.use-raise-for-status.use-raise-for-status",
+        "technology": [
+          "requests"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-either": [
+            {
+              "pattern": "requests.request(...)"
+            },
+            {
+              "pattern": "requests.get(...)"
+            },
+            {
+              "pattern": "requests.post(...)"
+            },
+            {
+              "pattern": "requests.put(...)"
+            },
+            {
+              "pattern": "requests.delete(...)"
+            },
+            {
+              "pattern": "requests.head(...)"
+            },
+            {
+              "pattern": "requests.patch(...)"
+            }
+          ]
+        },
+        {
+          "pattern-not-inside": "$RESP = requests.$METHOD(...)\n$RESP.raise_for_status(...)\n"
+        },
+        {
+          "pattern-not-inside": "requests.$METHOD(...).raise_for_status(...)\n"
+        },
+        {
+          "pattern-not-inside": "$RESP = requests.$METHOD(...)\nif $RESP.status_code == ...:\n  ...\n"
+        },
+        {
+          "pattern-not-inside": "$RESP = requests.$METHOD(...)\nif $RESP.status_code != ...:\n  ...\n"
+        },
+        {
+          "pattern-not-inside": "$RESP = requests.$METHOD(...)\n...\nif $RESP.ok:\n  ...\n"
+        },
+        {
+          "pattern-not-inside": "$RESP = requests.$METHOD(...)\n...\nif not $RESP.ok:\n  ...\n"
+        },
+        {
+          "pattern-not-inside": "with ...:\n  ...\n  $RESP = requests.$METHOD(...)\n  ...\n$RESP.raise_for_status(...)\n"
+        },
+        {
+          "pattern-not-inside": "with ... as ...:\n  ...\n  $RESP = requests.$METHOD(...)\n  ...\n$RESP.raise_for_status(...)\n"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.lang.compatibility.python37.python37-compatibility-httpsconn",
+      "languages": [
+        "python"
+      ],
+      "message": "Found usage of the 'blocksize' argument in a HTTPSConnection call. This is only available on Python 3.7+ and is therefore not backwards compatible. Remove this in order for this code to work in Python 3.6 and below.",
+      "metadata": {
+        "category": "compatibility",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "gxU1qd",
+            "url": "https://semgrep.dev/playground/r/RGT2L2/python.lang.compatibility.python37.python37-compatibility-httpsconn",
+            "version_id": "RGT2L2"
+          }
+        },
+        "shortlink": "https://sg.run/dKwd",
+        "source": "https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-httpsconn",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "http.client.HTTPSConnection(blocksize=$X,...)",
+      "severity": "ERROR"
+    },
+    {
+      "id": "ocaml.lang.best-practice.list.list-find-outside-try",
+      "languages": [
+        "ocaml"
+      ],
+      "message": "You should not use List.find outside of a try, or you should use List.find_opt",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "nJUzLq",
+            "url": "https://semgrep.dev/playground/r/l4TXkR/ocaml.lang.best-practice.list.list-find-outside-try",
+            "version_id": "l4TXkR"
+          }
+        },
+        "shortlink": "https://sg.run/N4KN",
+        "source": "https://semgrep.dev/r/ocaml.lang.best-practice.list.list-find-outside-try",
+        "technology": [
+          "ocaml"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern": "List.find ...\n"
+        },
+        {
+          "pattern-not-inside": "try ... with ... -> ...\n"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.lang.compatibility.python37.python37-compatibility-textiowrapper",
+      "languages": [
+        "python"
+      ],
+      "message": "Found usage of 'importlib.abc.ResourceReader'. This module is only available on Python 3.7+ and is therefore not backwards compatible. Instead, use another loader.",
+      "metadata": {
+        "category": "compatibility",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "3qUPdy",
+            "url": "https://semgrep.dev/playground/r/BjTKZr/python.lang.compatibility.python37.python37-compatibility-textiowrapper",
+            "version_id": "BjTKZr"
+          }
+        },
+        "shortlink": "https://sg.run/ndL2",
+        "source": "https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-textiowrapper",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "TextIOWrapper.reconfigure(...)",
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.best-practice.manual-collections-create.manual-defaultdict-list-create",
+      "languages": [
+        "python"
+      ],
+      "message": "manually creating a defaultdict - use collections.defaultdict(list)",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "NbUk16",
+            "url": "https://semgrep.dev/playground/r/d6T6gk/python.lang.best-practice.manual-collections-create.manual-defaultdict-list-create",
+            "version_id": "d6T6gk"
+          }
+        },
+        "shortlink": "https://sg.run/XBzb",
+        "source": "https://semgrep.dev/r/python.lang.best-practice.manual-collections-create.manual-defaultdict-list-create",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "$DICT = {}\n...\nfor $KEY, $VALUE in $OTHERDICT.items():\n    ...\n    if $KEY not in $DICT:\n        ...\n        $DICT[$KEY] = []\n        ...\n    $DICT[$KEY].append(...)\n"
+        },
+        {
+          "pattern": "$DICT = {}\n...\nfor $KEY, $VALUE in $OTHERDICT.items():\n    ...\n    $DICT.setdefault($KEY, []).append(...)\n"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.django.performance.upsell-count.use-count-method",
+      "languages": [
+        "python"
+      ],
+      "message": "Looks like you need to determine the number of records. Django provides the count() method which is more efficient than .len(). See https://docs.djangoproject.com/en/3.0/ref/models/querysets/",
+      "metadata": {
+        "category": "performance",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "wdUJZ8",
+            "url": "https://semgrep.dev/playground/r/bZTLjl/python.django.performance.upsell-count.use-count-method",
+            "version_id": "bZTLjl"
+          }
+        },
+        "shortlink": "https://sg.run/jRdN",
+        "source": "https://semgrep.dev/r/python.django.performance.upsell-count.use-count-method",
+        "technology": [
+          "django"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "$X.objects.$FUNC(...).len()"
+        },
+        {
+          "pattern": "$X.objects.$FUNC(...).$FILTER().len()"
+        },
+        {
+          "pattern": "$X.objects.$FUNC(...).$FILTER().$UPDATE(...).len()"
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.bokeh.maintainability.deprecated.deprecated_apis.bokeh-deprecated-apis",
+      "languages": [
+        "python"
+      ],
+      "message": "These APIs are deprecated in Bokeh see https://docs.bokeh.org/en/latest/docs/releases.html#api-deprecations",
+      "metadata": {
+        "category": "maintainability",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "JDUyW4",
+            "url": "https://semgrep.dev/playground/r/DkT2AE/python.bokeh.maintainability.deprecated.deprecated_apis.bokeh-deprecated-apis",
+            "version_id": "DkT2AE"
+          }
+        },
+        "shortlink": "https://sg.run/7ok2",
+        "source": "https://semgrep.dev/r/python.bokeh.maintainability.deprecated.deprecated_apis.bokeh-deprecated-apis",
+        "technology": [
+          "bokeh"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "import bokeh.layouts.widgetbox\n"
+        },
+        {
+          "pattern": "import bokeh.models.graphs.from_networkx\n"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.lang.best-practice.manual-collections-create.manual-counter-create",
+      "languages": [
+        "python"
+      ],
+      "message": "manually creating a counter - use collections.Counter",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "kxUk73",
+            "url": "https://semgrep.dev/playground/r/ZRTedL/python.lang.best-practice.manual-collections-create.manual-counter-create",
+            "version_id": "ZRTedL"
+          }
+        },
+        "shortlink": "https://sg.run/jRZJ",
+        "source": "https://semgrep.dev/r/python.lang.best-practice.manual-collections-create.manual-counter-create",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "$DICT = {}\n...\nfor $KEY, $VALUE in $OTHERDICT.items():\n    ...\n    if $KEY not in $DICT:\n        ...\n        $DICT[$KEY] = 0\n        ...\n    $DICT[$KEY] += 1\n",
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.lang.best-practice.open-never-closed.open-never-closed",
+      "languages": [
+        "python"
+      ],
+      "message": "file object opened without corresponding close",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "x8Un4Q",
+            "url": "https://semgrep.dev/playground/r/ExT1Wk/python.lang.best-practice.open-never-closed.open-never-closed",
+            "version_id": "ExT1Wk"
+          }
+        },
+        "shortlink": "https://sg.run/9oN8",
+        "source": "https://semgrep.dev/r/python.lang.best-practice.open-never-closed.open-never-closed",
+        "technology": [
+          "python"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-not-inside": "$F = open(...)\n...\n$F.close()\n"
+        },
+        {
+          "pattern-not-inside": "$F = io.open(...)\n...\n$F.close()\n"
+        },
+        {
+          "pattern-not-inside": "$F = tarfile.open(...)\n...\n$F.close()\n"
+        },
+        {
+          "pattern-not-inside": "$F = ZipFile.open(...)\n...\n$F.close()\n"
+        },
+        {
+          "pattern-not-inside": "$F = tempfile.TemporaryFile(...)\n...\n$F.close()\n"
+        },
+        {
+          "pattern-not-inside": "$F = tempfile.NamedTemporaryFile(...)\n...\n$F.close()\n"
+        },
+        {
+          "pattern-not-inside": "$F = tempfile.SpooledTemporaryFile(...)\n...\n$F.close()\n"
+        },
+        {
+          "pattern-not-inside": "$F = open(...)\n...\ntry:\n    ...\nfinally:\n    $F.close()\n"
+        },
+        {
+          "pattern-not-inside": "$F = io.open(...)\n...\ntry:\n    ...\nfinally:\n    $F.close()\n"
+        },
+        {
+          "pattern-not-inside": "$F = tarfile.open(...)\n...\ntry:\n    ...\nfinally:\n    $F.close()\n"
+        },
+        {
+          "pattern-not-inside": "$F = ZipFile.open(...)\n...\ntry:\n    ...\nfinally:\n    $F.close()\n"
+        },
+        {
+          "pattern-not-inside": "$F = tempfile.TemporaryFile(...)\n...\ntry:\n    ...\nfinally:\n    $F.close()\n"
+        },
+        {
+          "pattern-not-inside": "$F = tempfile.NamedTemporaryFile(...)\n...\ntry:\n    ...\nfinally:\n    $F.close()\n"
+        },
+        {
+          "pattern-not-inside": "$F = tempfile.SpooledTemporaryFile(...)\n...\ntry:\n    ...\nfinally:\n    $F.close()\n"
+        },
+        {
+          "pattern-either": [
+            {
+              "pattern": "$F = open(...)"
+            },
+            {
+              "pattern": "$F = io.open(...)"
+            },
+            {
+              "pattern": "$F = tarfile.open(...)"
+            },
+            {
+              "pattern": "$F = ZipFile.open(...)"
+            },
+            {
+              "pattern": "$F = tempfile.TemporaryFile(...)"
+            },
+            {
+              "pattern": "$F = tempfile.NamedTemporaryFile(...)"
+            },
+            {
+              "pattern": "$F = tempfile.SpooledTemporaryFile(...)"
+            }
+          ]
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "go.lang.maintainability.useless-ifelse.useless-if-conditional",
+      "languages": [
+        "go"
+      ],
+      "message": "Detected an if block that checks for the same condition on both branches (`$X`). The second condition check is useless as it is the same as the first, and therefore can be removed from the code,",
+      "metadata": {
+        "category": "maintainability",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "lBU9kj",
+            "url": "https://semgrep.dev/playground/r/vdTvKn/go.lang.maintainability.useless-ifelse.useless-if-conditional",
+            "version_id": "vdTvKn"
+          }
+        },
+        "shortlink": "https://sg.run/J9yQ",
+        "source": "https://semgrep.dev/r/go.lang.maintainability.useless-ifelse.useless-if-conditional",
+        "technology": [
+          "go"
+        ]
+      },
+      "pattern": "if ($X) {\n    ...\n} else if ($X) {\n    ...\n}\n",
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.lang.compatibility.python37.python37-compatibility-locale1",
+      "languages": [
+        "python"
+      ],
+      "message": "Found usage of the 'monetary' argument in a function call of 'locale.format_string'. This is only available on Python 3.7+ and is therefore not backwards compatible. Instead, remove the 'monetary' argument.",
+      "metadata": {
+        "category": "compatibility",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "GdU72R",
+            "url": "https://semgrep.dev/playground/r/qkTp7L/python.lang.compatibility.python37.python37-compatibility-locale1",
+            "version_id": "qkTp7L"
+          }
+        },
+        "shortlink": "https://sg.run/gLeZ",
+        "source": "https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-locale1",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "locale.format_string(monetary=$X, ...)",
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.compatibility.python37.python37-compatibility-importlib",
+      "languages": [
+        "python"
+      ],
+      "message": "source_hash' is only available on Python 3.7+. This does not work in lower versions, and therefore is not backwards compatible. Instead, use another hash function.",
+      "metadata": {
+        "category": "compatibility",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "7KUQOl",
+            "url": "https://semgrep.dev/playground/r/JdToxL/python.lang.compatibility.python37.python37-compatibility-importlib",
+            "version_id": "JdToxL"
+          }
+        },
+        "shortlink": "https://sg.run/OPDn",
+        "source": "https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-importlib",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "importlib.source_hash()",
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.attr.correctness.mutable-initializer.attr-mutable-initializer",
+      "languages": [
+        "python"
+      ],
+      "message": "Unsafe usage of mutable initializer with attr.s decorator. Multiple instances of this class will re-use the same data structure, which is likely not the desired behavior. Consider instead: replace assignment to mutable initializer (ex. dict() or {}) with attr.ib(factory=type) where type is dict, set, or list",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "PeUZ6E",
+            "url": "https://semgrep.dev/playground/r/l4Tvyo/python.attr.correctness.mutable-initializer.attr-mutable-initializer",
+            "version_id": "l4Tvyo"
+          }
+        },
+        "shortlink": "https://sg.run/EkQN",
+        "source": "https://semgrep.dev/r/python.attr.correctness.mutable-initializer.attr-mutable-initializer",
+        "technology": [
+          "attr"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-not-inside": "def $Y(...):\n  ...\n"
+        },
+        {
+          "pattern-not-inside": "def $Y(...) -> $TYPE:\n  ...\n"
+        },
+        {
+          "pattern-either": [
+            {
+              "pattern-inside": "@attr.s(...,auto_attribs=True, ...)\nclass $X(...):\n  ...\n"
+            },
+            {
+              "pattern-inside": "@attrs.define\nclass $X(...):\n  ...\n"
+            }
+          ]
+        },
+        {
+          "pattern-either": [
+            {
+              "pattern": "$M = {...}\n"
+            },
+            {
+              "pattern": "$M = [...]"
+            },
+            {
+              "pattern": "$M = list(...)"
+            },
+            {
+              "pattern": "$M = set(...)"
+            },
+            {
+              "pattern": "$M = dict(...)"
+            }
+          ]
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.sqlalchemy.correctness.delete-where.delete-where-no-execute",
+      "languages": [
+        "python"
+      ],
+      "message": ".delete().where(...) results in a no-op in SQLAlchemy unless the command is executed, use .filter(...).delete() instead.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "GdU0LJ",
+            "url": "https://semgrep.dev/playground/r/44Ten8/python.sqlalchemy.correctness.delete-where.delete-where-no-execute",
+            "version_id": "44Ten8"
+          }
+        },
+        "shortlink": "https://sg.run/KWp7",
+        "source": "https://semgrep.dev/r/python.sqlalchemy.correctness.delete-where.delete-where-no-execute",
+        "technology": [
+          "sqlalchemy"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern": "$X.delete().where(...)"
+        },
+        {
+          "pattern-not-inside": "$X.delete().where(...).execute()"
+        },
+        {
+          "pattern-not-inside": "$C.execute(...)"
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "ocaml.lang.performance.list.ocamllint-length-list-zero",
+      "languages": [
+        "ocaml"
+      ],
+      "message": "You probably want $X = [], which is faster.",
+      "metadata": {
+        "category": "performance",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "ReUglk",
+            "url": "https://semgrep.dev/playground/r/bZTLyO/ocaml.lang.performance.list.ocamllint-length-list-zero",
+            "version_id": "bZTLyO"
+          }
+        },
+        "shortlink": "https://sg.run/8yrQ",
+        "source": "https://semgrep.dev/r/ocaml.lang.performance.list.ocamllint-length-list-zero",
+        "technology": [
+          "ocaml"
+        ]
+      },
+      "pattern": "List.length $X = 0",
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.lang.compatibility.python37.python37-compatibility-multiprocess2",
+      "languages": [
+        "python"
+      ],
+      "message": "multiprocessing.Process.kill() is only available on Python 3.7+ and is therefore not backwards compatible. Instead, use terminate().",
+      "metadata": {
+        "category": "compatibility",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "BYUNE9",
+            "url": "https://semgrep.dev/playground/r/6xTy90/python.lang.compatibility.python37.python37-compatibility-multiprocess2",
+            "version_id": "6xTy90"
+          }
+        },
+        "shortlink": "https://sg.run/4x1z",
+        "source": "https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-multiprocess2",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "multiprocessing.Process.kill()",
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.correctness.dict-modify-iterating.dict-del-while-iterate",
+      "languages": [
+        "python"
+      ],
+      "message": "It appears that `$DICT[$KEY]` is a dict with items being deleted while in a for loop. This is usually a bad idea and will likely lead to a RuntimeError: dictionary changed size during iteration",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "references": [
+          "https://docs.python.org/3/library/stdtypes.html#dictionary-view-objects"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "PeUZLW",
+            "url": "https://semgrep.dev/playground/r/NdTey7/python.lang.correctness.dict-modify-iterating.dict-del-while-iterate",
+            "version_id": "NdTey7"
+          }
+        },
+        "shortlink": "https://sg.run/BkP2",
+        "source": "https://semgrep.dev/r/python.lang.correctness.dict-modify-iterating.dict-del-while-iterate",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "for $KEY, $VALUE in $DICT.items():\n    ...\n    del $DICT[$KEY]\n"
+        },
+        {
+          "pattern": "for $KEY in $DICT.keys():\n    ...\n    del $DICT[$KEY]\n"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "ocaml.lang.best-practice.ifs.ocamllint-useless-else",
+      "languages": [
+        "ocaml"
+      ],
+      "message": "Useless else. Just remove the else branch;",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "d8UjxD",
+            "url": "https://semgrep.dev/playground/r/K3TwEq/ocaml.lang.best-practice.ifs.ocamllint-useless-else",
+            "version_id": "K3TwEq"
+          }
+        },
+        "shortlink": "https://sg.run/rd7J",
+        "source": "https://semgrep.dev/r/ocaml.lang.best-practice.ifs.ocamllint-useless-else",
+        "technology": [
+          "ocaml"
+        ]
+      },
+      "pattern": "if $E then $E1 else ()",
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.lang.compatibility.python37.python37-compatibility-ipv4network2",
+      "languages": [
+        "python"
+      ],
+      "message": "IPv4Network.supernet_of is only available on Python 3.7+ and is therefore not backwards compatible. Instead, check if the supernet is in 'supernet'.",
+      "metadata": {
+        "category": "compatibility",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "5rUO61",
+            "url": "https://semgrep.dev/playground/r/K3Twkg/python.lang.compatibility.python37.python37-compatibility-ipv4network2",
+            "version_id": "K3Twkg"
+          }
+        },
+        "shortlink": "https://sg.run/8y3E",
+        "source": "https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-ipv4network2",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "ipaddress.IPv4Network.supernet_of($X)",
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.compatibility.python37.python37-compatibility-ipv4network1",
+      "languages": [
+        "python"
+      ],
+      "message": "IPv4Network.subnet_of is only available on Python 3.7+ and is therefore not backwards compatible. Instead, check if the subnet is in 'subnets'.",
+      "metadata": {
+        "category": "compatibility",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "JDUyqR",
+            "url": "https://semgrep.dev/playground/r/0bTpzo/python.lang.compatibility.python37.python37-compatibility-ipv4network1",
+            "version_id": "0bTpzo"
+          }
+        },
+        "shortlink": "https://sg.run/LwRo",
+        "source": "https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-ipv4network1",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "ipaddress.IPv4Network.subnet_of($X)",
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.django.compatibility.django-2_0-compat.django-compat-2_0-signals-weak",
+      "languages": [
+        "python"
+      ],
+      "message": "The weak argument to django.dispatch.signals.Signal.disconnect() is removed in Django 2.0.",
+      "metadata": {
+        "category": "compatibility",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "pKUOWW",
+            "url": "https://semgrep.dev/playground/r/K3TwWz/python.django.compatibility.django-2_0-compat.django-compat-2_0-signals-weak",
+            "version_id": "K3TwWz"
+          }
+        },
+        "shortlink": "https://sg.run/0Qjj",
+        "source": "https://semgrep.dev/r/python.django.compatibility.django-2_0-compat.django-compat-2_0-signals-weak",
+        "technology": [
+          "django"
+        ]
+      },
+      "pattern": "django.dispatch.signals.Signal.disconnect(..., weak=$X, ...)",
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.sqlalchemy.performance.performance-improvements.len-all-count",
+      "languages": [
+        "python"
+      ],
+      "message": "Using QUERY.count() instead of len(QUERY.all()) sends less data to the client since the SQLAlchemy method is performed server-side.",
+      "metadata": {
+        "category": "performance",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "ReUPOw",
+            "url": "https://semgrep.dev/playground/r/PkTjgO/python.sqlalchemy.performance.performance-improvements.len-all-count",
+            "version_id": "PkTjgO"
+          }
+        },
+        "shortlink": "https://sg.run/4y8g",
+        "source": "https://semgrep.dev/r/python.sqlalchemy.performance.performance-improvements.len-all-count",
+        "technology": [
+          "sqlalchemy"
+        ]
+      },
+      "pattern": "len($X.all())",
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.flask.maintainability.deprecated.deprecated-apis.flask-deprecated-apis",
+      "languages": [
+        "python"
+      ],
+      "message": "deprecated Flask API",
+      "metadata": {
+        "category": "maintainability",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "eqU86E",
+            "url": "https://semgrep.dev/playground/r/5PTNDX/python.flask.maintainability.deprecated.deprecated-apis.flask-deprecated-apis",
+            "version_id": "5PTNDX"
+          }
+        },
+        "shortlink": "https://sg.run/rdLR",
+        "source": "https://semgrep.dev/r/python.flask.maintainability.deprecated.deprecated-apis.flask-deprecated-apis",
+        "technology": [
+          "flask"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "$F = Flask(...)\n...\n$F.open_session(...)\n"
+        },
+        {
+          "pattern": "$F = Flask(...)\n...\n$F.save_session(...)\n"
+        },
+        {
+          "pattern": "$F = Flask(...)\n...\n$F.make_null_session(...)\n"
+        },
+        {
+          "pattern": "$F = Flask(...)\n...\n$F.init_jinja_globals(...)\n"
+        },
+        {
+          "pattern": "$F = Flask(...)\n...\n$F.request_globals_class(...)\n"
+        },
+        {
+          "pattern": "$F = Flask(...)\n...\n$F.static_path(...)\n"
+        },
+        {
+          "pattern": "app.open_session(...)"
+        },
+        {
+          "pattern": "app.save_session(...)"
+        },
+        {
+          "pattern": "app.make_null_session(...)"
+        },
+        {
+          "pattern": "app.init_jinja_globals(...)"
+        },
+        {
+          "pattern": "app.request_globals_class(...)"
+        },
+        {
+          "pattern": "app.static_path(...)"
+        },
+        {
+          "pattern": "app.config.from_json(...)"
+        },
+        {
+          "pattern": "flask.json_available"
+        },
+        {
+          "pattern": "flask.request.module"
+        },
+        {
+          "pattern": "flask.testing.make_test_environ_builder(...)"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.lang.maintainability.useless-literal.useless-literal-set",
+      "languages": [
+        "python"
+      ],
+      "message": "`$X` is uselessly assigned twice inside the creation of the set",
+      "metadata": {
+        "category": "maintainability",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "kxUkAN",
+            "url": "https://semgrep.dev/playground/r/BjTKAr/python.lang.maintainability.useless-literal.useless-literal-set",
+            "version_id": "BjTKAr"
+          }
+        },
+        "shortlink": "https://sg.run/1Zbw",
+        "source": "https://semgrep.dev/r/python.lang.maintainability.useless-literal.useless-literal-set",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "set(..., ($X, $A), ..., ($X, $B), ...)\n",
+      "severity": "ERROR"
+    },
+    {
+      "id": "ocaml.lang.best-practice.bool.ocamllint-bool-false",
+      "languages": [
+        "ocaml"
+      ],
+      "message": "Comparison to boolean. Just use `not $X`",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "eqU8jW",
+            "url": "https://semgrep.dev/playground/r/WrTYB0/ocaml.lang.best-practice.bool.ocamllint-bool-false",
+            "version_id": "WrTYB0"
+          }
+        },
+        "shortlink": "https://sg.run/9oEy",
+        "source": "https://semgrep.dev/r/ocaml.lang.best-practice.bool.ocamllint-bool-false",
+        "technology": [
+          "ocaml"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "$X = false"
+        },
+        {
+          "pattern": "$X == false"
+        },
+        {
+          "pattern": "$X <> true"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.django.compatibility.django-2_0-compat.django-compat-2_0-check-aggregate-support",
+      "languages": [
+        "python"
+      ],
+      "message": "django.db.backends.base.BaseDatabaseOperations.check_aggregate_support() is removed in Django 2.0.",
+      "metadata": {
+        "category": "compatibility",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "2ZUbqg",
+            "url": "https://semgrep.dev/playground/r/qkTp8j/python.django.compatibility.django-2_0-compat.django-compat-2_0-check-aggregate-support",
+            "version_id": "qkTp8j"
+          }
+        },
+        "shortlink": "https://sg.run/KlQ5",
+        "source": "https://semgrep.dev/r/python.django.compatibility.django-2_0-compat.django-compat-2_0-check-aggregate-support",
+        "technology": [
+          "django"
+        ]
+      },
+      "pattern": "django.db.backends.base.BaseDatabaseOperations.check_aggregate_support(...)",
+      "severity": "WARNING"
+    },
+    {
+      "fix-regex": {
+        "regex": "(.*)\\)$",
+        "replacement": "\\1, timeout=30)"
+      },
+      "id": "python.requests.best-practice.use-timeout.use-timeout",
+      "languages": [
+        "python"
+      ],
+      "message": "Detected a 'requests' call without a timeout set. By default, 'requests' calls wait until the connection is closed. This means a 'requests' call without a timeout will hang the program if a response is never received. Consider setting a timeout for all 'requests'.",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "references": [
+          "https://docs.python-requests.org/en/latest/user/advanced/?highlight=timeout#timeouts",
+          "https://requests.readthedocs.io/en/latest/user/quickstart/#timeouts"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "KxU42G",
+            "url": "https://semgrep.dev/playground/r/8KT37r/python.requests.best-practice.use-timeout.use-timeout",
+            "version_id": "8KT37r"
+          }
+        },
+        "shortlink": "https://sg.run/R8kO",
+        "source": "https://semgrep.dev/r/python.requests.best-practice.use-timeout.use-timeout",
+        "technology": [
+          "requests"
+        ]
+      },
+      "pattern-either": [
+        {
+          "patterns": [
+            {
+              "pattern-not": "requests.$W(..., timeout=$N, ...)"
+            },
+            {
+              "pattern-not": "requests.$W(..., **$KWARGS)"
+            },
+            {
+              "pattern-either": [
+                {
+                  "pattern": "requests.request(...)"
+                },
+                {
+                  "pattern": "requests.get(...)"
+                },
+                {
+                  "pattern": "requests.post(...)"
+                },
+                {
+                  "pattern": "requests.put(...)"
+                },
+                {
+                  "pattern": "requests.delete(...)"
+                },
+                {
+                  "pattern": "requests.head(...)"
+                },
+                {
+                  "pattern": "requests.patch(...)"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "patterns": [
+            {
+              "pattern-inside": "$SESSION = requests.Session(...)\n...\n"
+            },
+            {
+              "pattern-not": "$SESSION.$W(..., timeout=$N, ...)\n"
+            },
+            {
+              "pattern-not": "$SESSION.$W(..., **$KWARGS)\n"
+            },
+            {
+              "pattern-either": [
+                {
+                  "pattern": "$SESSION.get(...)"
+                },
+                {
+                  "pattern": "$SESSION.post(...)"
+                },
+                {
+                  "pattern": "$SESSION.put(...)"
+                },
+                {
+                  "pattern": "$SESSION.delete(...)"
+                },
+                {
+                  "pattern": "$SESSION.head(...)"
+                },
+                {
+                  "pattern": "$SESSION.patch(...)"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "ocaml.lang.best-practice.hashtbl.hashtbl-find-outside-try",
+      "languages": [
+        "ocaml"
+      ],
+      "message": "You should not use Hashtbl.find outside of a try, or you should use Hashtbl.find_opt",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "v8Un6Z",
+            "url": "https://semgrep.dev/playground/r/0bTpNP/ocaml.lang.best-practice.hashtbl.hashtbl-find-outside-try",
+            "version_id": "0bTpNP"
+          }
+        },
+        "shortlink": "https://sg.run/yd7A",
+        "source": "https://semgrep.dev/r/ocaml.lang.best-practice.hashtbl.hashtbl-find-outside-try",
+        "technology": [
+          "ocaml"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern": "Hashtbl.find ...\n"
+        },
+        {
+          "pattern-not-inside": "try ... with ... -> ...\n"
+        },
+        {
+          "pattern-not-inside": "match ... with | ... -> ...\n"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "ocaml.lang.correctness.physical_vs_structural.physical-not-equal",
+      "languages": [
+        "ocaml"
+      ],
+      "message": "You probably want the structural inequality operator <>",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "PeUZy0",
+            "url": "https://semgrep.dev/playground/r/GxTZK6/ocaml.lang.correctness.physical_vs_structural.physical-not-equal",
+            "version_id": "GxTZK6"
+          }
+        },
+        "shortlink": "https://sg.run/nd3r",
+        "source": "https://semgrep.dev/r/ocaml.lang.correctness.physical_vs_structural.physical-not-equal"
+      },
+      "pattern": "$X != $Y",
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.sqlalchemy.performance.performance-improvements.batch-import",
+      "languages": [
+        "python"
+      ],
+      "message": "Rather than adding one element at a time, consider batch loading to improve performance.",
+      "metadata": {
+        "category": "performance",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "AbUWjy",
+            "url": "https://semgrep.dev/playground/r/JdTodZ/python.sqlalchemy.performance.performance-improvements.batch-import",
+            "version_id": "JdTodZ"
+          }
+        },
+        "shortlink": "https://sg.run/PprN",
+        "source": "https://semgrep.dev/r/python.sqlalchemy.performance.performance-improvements.batch-import",
+        "technology": [
+          "sqlalchemy"
+        ]
+      },
+      "pattern": "for $X in $Y:\n  db.session.add($Z)\n",
+      "severity": "WARNING"
+    },
+    {
+      "id": "ocaml.lang.performance.list.ocamllint-length-more-than-zero",
+      "languages": [
+        "ocaml"
+      ],
+      "message": "You probably want $X <> [], which is faster.",
+      "metadata": {
+        "category": "performance",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "AbUz2X",
+            "url": "https://semgrep.dev/playground/r/NdTe4Y/ocaml.lang.performance.list.ocamllint-length-more-than-zero",
+            "version_id": "NdTe4Y"
+          }
+        },
+        "shortlink": "https://sg.run/gLZ5",
+        "source": "https://semgrep.dev/r/ocaml.lang.performance.list.ocamllint-length-more-than-zero",
+        "technology": [
+          "ocaml"
+        ]
+      },
+      "pattern": "List.length $X > 0",
+      "severity": "WARNING"
+    },
+    {
+      "id": "ocaml.lang.best-practice.bool.ocamllint-bool-true",
+      "languages": [
+        "ocaml"
+      ],
+      "message": "Comparison to boolean. Just use `$X`",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "OrU3xY",
+            "url": "https://semgrep.dev/playground/r/DkT2lE/ocaml.lang.best-practice.bool.ocamllint-bool-true",
+            "version_id": "DkT2lE"
+          }
+        },
+        "shortlink": "https://sg.run/1ZE1",
+        "source": "https://semgrep.dev/r/ocaml.lang.best-practice.bool.ocamllint-bool-true",
+        "technology": [
+          "ocaml"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "$X = true"
+        },
+        {
+          "pattern": "$X == true"
+        },
+        {
+          "pattern": "$X != false"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.lang.compatibility.python37.python37-compatibility-ipv6network2",
+      "languages": [
+        "python"
+      ],
+      "message": "IPv6Network.supernet_of is only available on Python 3.7+ and is therefore not backwards compatible. Instead, check if the supernet is in 'supernet'.",
+      "metadata": {
+        "category": "compatibility",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "PeUZYr",
+            "url": "https://semgrep.dev/playground/r/WrTYKq/python.lang.compatibility.python37.python37-compatibility-ipv6network2",
+            "version_id": "WrTYKq"
+          }
+        },
+        "shortlink": "https://sg.run/7orW",
+        "source": "https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-ipv6network2",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "ipaddress.IPv6Network.supernet_of($X)",
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.correctness.common-mistakes.default-mutable-list.default-mutable-list",
+      "languages": [
+        "python"
+      ],
+      "message": "Function $F mutates default list $D. Python only instantiates default function arguments once and shares the instance across the function calls. If the default function argument is mutated, that will modify the instance used by all future function calls. This can cause unexpected results, or lead to security vulnerabilities whereby one function consumer can view or modify the data of another function consumer. Instead, use a default argument (like None) to indicate that no argument was provided and instantiate a new list at that time. For example: `if $D is None: $D = []`.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "references": [
+          "https://docs.python-guide.org/writing/gotchas/#mutable-default-arguments"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "lBU9PZ",
+            "url": "https://semgrep.dev/playground/r/WrT7BL/python.lang.correctness.common-mistakes.default-mutable-list.default-mutable-list",
+            "version_id": "WrT7BL"
+          }
+        },
+        "shortlink": "https://sg.run/BkPW",
+        "source": "https://semgrep.dev/r/python.lang.correctness.common-mistakes.default-mutable-list.default-mutable-list",
+        "technology": [
+          "python"
+        ]
+      },
+      "options": {
+        "symbolic_propagation": true
+      },
+      "patterns": [
+        {
+          "pattern-not-inside": "def $A(...):\n  ...\n  def $F(..., $D=[], ...):\n    ...\n"
+        },
+        {
+          "pattern-inside": "def $F(..., $D=[], ...):\n  ...\n"
+        },
+        {
+          "pattern-not-inside": "$D = []\n...\n"
+        },
+        {
+          "pattern-not-inside": "$D = [...]\n...\n"
+        },
+        {
+          "pattern-not-inside": "$D = list(...)\n...\n"
+        },
+        {
+          "pattern-not-inside": "$D = copy.deepcopy($D)\n...\n"
+        },
+        {
+          "pattern-not-inside": "$D = copy.copy($D)\n...\n"
+        },
+        {
+          "pattern-not-inside": "$D = list.copy($D)\n...\n"
+        },
+        {
+          "pattern-not-inside": "$D = $D[:]\n...\n"
+        },
+        {
+          "pattern-not-inside": "$D = [... for ... in ...]\n...\n"
+        },
+        {
+          "pattern-not-inside": "$D = $D or []\n...\n"
+        },
+        {
+          "pattern-either": [
+            {
+              "pattern": "$D.append(...)\n"
+            },
+            {
+              "pattern": "$D.extend(...)\n"
+            },
+            {
+              "pattern": "$D.insert(...)\n"
+            }
+          ]
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.django.compatibility.django-2_0-compat.django-compat-2_0-extra-forms",
+      "languages": [
+        "python"
+      ],
+      "message": "The django.forms.extras package is removed in Django 2.0.",
+      "metadata": {
+        "category": "compatibility",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "X5U89v",
+            "url": "https://semgrep.dev/playground/r/l4TXnd/python.django.compatibility.django-2_0-compat.django-compat-2_0-extra-forms",
+            "version_id": "l4TXnd"
+          }
+        },
+        "shortlink": "https://sg.run/qx07",
+        "source": "https://semgrep.dev/r/python.django.compatibility.django-2_0-compat.django-compat-2_0-extra-forms",
+        "technology": [
+          "django"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "from django.forms import extras"
+        },
+        {
+          "pattern": "from django.forms.extras import $X"
+        },
+        {
+          "pattern": "from django.forms import extras as $Y"
+        },
+        {
+          "pattern": "from django.forms.extras import $X as $Y"
+        },
+        {
+          "pattern": "import django.forms.extras"
+        },
+        {
+          "pattern": "import django.forms.extras.$X"
+        },
+        {
+          "pattern": "import django.forms.extras as $Y"
+        },
+        {
+          "pattern": "import django.forms.extras.$X as $Y"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "ocaml.lang.best-practice.string.ocamllint-useless-sprintf",
+      "languages": [
+        "ocaml"
+      ],
+      "message": "Useless sprintf",
+      "metadata": {
+        "category": "best-practice",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "QrUzO6",
+            "url": "https://semgrep.dev/playground/r/2KTdy0/ocaml.lang.best-practice.string.ocamllint-useless-sprintf",
+            "version_id": "2KTdy0"
+          }
+        },
+        "shortlink": "https://sg.run/vzl0",
+        "source": "https://semgrep.dev/r/ocaml.lang.best-practice.string.ocamllint-useless-sprintf",
+        "technology": [
+          "ocaml"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "Printf.sprintf \"...\""
+        },
+        {
+          "pattern": "Printf.sprintf \"%s\" $S"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.lang.correctness.pdb.pdb-remove",
+      "languages": [
+        "python"
+      ],
+      "message": "pdb is an interactive debugging tool and you may have forgotten to remove it before committing your code",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "ReUgv3",
+            "url": "https://semgrep.dev/playground/r/e1TZjO/python.lang.correctness.pdb.pdb-remove",
+            "version_id": "e1TZjO"
+          }
+        },
+        "shortlink": "https://sg.run/Kl0X",
+        "source": "https://semgrep.dev/r/python.lang.correctness.pdb.pdb-remove",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "pdb.$X(...)"
+        },
+        {
+          "pattern": "pdb.Pdb.$X(...)"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.django.correctness.string-field-null-checks.string-field-must-set-null-true",
+      "languages": [
+        "python"
+      ],
+      "message": "If a text field declares unique=True and blank=True, null=True must also be set to avoid unique constraint violations when saving multiple objects with blank values.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "bwUwqR",
+            "url": "https://semgrep.dev/playground/r/2KTdJY/python.django.correctness.string-field-null-checks.string-field-must-set-null-true",
+            "version_id": "2KTdJY"
+          }
+        },
+        "shortlink": "https://sg.run/pxPZ",
+        "source": "https://semgrep.dev/r/python.django.correctness.string-field-null-checks.string-field-must-set-null-true",
+        "technology": [
+          "django"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-inside": "class $M(...):\n  ...\n"
+        },
+        {
+          "pattern-not": "$F = django.db.models.CharField(..., unique=True, blank=True, null=True, ...)"
+        },
+        {
+          "pattern-not": "$F = django.db.models.TextField(..., unique=True, blank=True, null=True, ...)"
+        },
+        {
+          "pattern-either": [
+            {
+              "pattern": "$F = django.db.models.CharField(..., unique=True, blank=True, ...)"
+            },
+            {
+              "pattern": "$F = django.db.models.TextField(..., unique=True, blank=True, ...)"
+            }
+          ]
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.flask.correctness.same-handler-name.flask-duplicate-handler-name",
+      "languages": [
+        "python"
+      ],
+      "message": "Looks like `$R` is a flask function handler that registered to two different routes. This will cause a runtime error",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "x8UnYQ",
+            "url": "https://semgrep.dev/playground/r/JdTorW/python.flask.correctness.same-handler-name.flask-duplicate-handler-name",
+            "version_id": "JdTorW"
+          }
+        },
+        "shortlink": "https://sg.run/9o18",
+        "source": "https://semgrep.dev/r/python.flask.correctness.same-handler-name.flask-duplicate-handler-name",
+        "technology": [
+          "flask"
+        ]
+      },
+      "pattern": "@app.route(\"...\", ...)\ndef $R(...):\n    ...\n...\n@app.route(\"...\", ...)\ndef $R(...):\n    ...\n",
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.django.compatibility.django-2_0-compat.django-compat-2_0-assignment-tag",
+      "languages": [
+        "python"
+      ],
+      "message": "The assignment_tag helper is removed in Django 2.0.",
+      "metadata": {
+        "category": "compatibility",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "j2UvxK",
+            "url": "https://semgrep.dev/playground/r/YDTY9Q/python.django.compatibility.django-2_0-compat.django-compat-2_0-assignment-tag",
+            "version_id": "YDTY9Q"
+          }
+        },
+        "shortlink": "https://sg.run/l2RE",
+        "source": "https://semgrep.dev/r/python.django.compatibility.django-2_0-compat.django-compat-2_0-assignment-tag",
+        "technology": [
+          "django"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "$X.assignment_tag(...)"
+        },
+        {
+          "pattern": "assignment_tag(...)"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "ocaml.lang.portability.slash_tmp.not-portable-tmp-string",
+      "languages": [
+        "ocaml"
+      ],
+      "message": "You should probably use Filename.get_temp_dirname().",
+      "metadata": {
+        "category": "portability",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "BYUNAk",
+            "url": "https://semgrep.dev/playground/r/0bTJYq/ocaml.lang.portability.slash_tmp.not-portable-tmp-string",
+            "version_id": "0bTJYq"
+          }
+        },
+        "shortlink": "https://sg.run/Q5lq",
+        "source": "https://semgrep.dev/r/ocaml.lang.portability.slash_tmp.not-portable-tmp-string"
+      },
+      "pattern": "\"=~/\\/tmp/\"\n",
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.django.compatibility.django-2_0-compat.django-compat-2_0-assert-redirects-helper",
+      "languages": [
+        "python"
+      ],
+      "message": "The host argument to assertRedirects is removed in Django 2.0.",
+      "metadata": {
+        "category": "compatibility",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "10UKlx",
+            "url": "https://semgrep.dev/playground/r/6xTyP1/python.django.compatibility.django-2_0-compat.django-compat-2_0-assert-redirects-helper",
+            "version_id": "6xTyP1"
+          }
+        },
+        "shortlink": "https://sg.run/YvQy",
+        "source": "https://semgrep.dev/r/python.django.compatibility.django-2_0-compat.django-compat-2_0-assert-redirects-helper",
+        "technology": [
+          "django"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "$X.assertRedirects(..., host=$Y, ...)"
+        },
+        {
+          "pattern": "assertRedirects(..., host=$Y, ...)"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "go.lang.correctness.useless-eqeq.eqeq-is-bad",
+      "languages": [
+        "go"
+      ],
+      "message": "Detected useless comparison operation `$X == $X` or `$X != $X`. This will always return 'True' or 'False' and therefore is not necessary. Instead, remove this comparison operation or use another comparison expression that is not deterministic.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "DbUplr",
+            "url": "https://semgrep.dev/playground/r/O9TvAk/go.lang.correctness.useless-eqeq.eqeq-is-bad",
+            "version_id": "O9TvAk"
+          }
+        },
+        "shortlink": "https://sg.run/W8dz",
+        "source": "https://semgrep.dev/r/go.lang.correctness.useless-eqeq.eqeq-is-bad",
+        "technology": [
+          "go"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-not-inside": "assert(...)"
+        },
+        {
+          "pattern-either": [
+            {
+              "pattern": "$X == $X"
+            },
+            {
+              "pattern": "$X != $X"
+            }
+          ]
+        },
+        {
+          "pattern-not": "1 == 1"
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.lang.correctness.common-mistakes.default-mutable-dict.default-mutable-dict",
+      "languages": [
+        "python"
+      ],
+      "message": "Function $F mutates default dict $D. Python only instantiates default function arguments once and shares the instance across the function calls. If the default function argument is mutated, that will modify the instance used by all future function calls. This can cause unexpected results, or lead to security vulnerabilities whereby one function consumer can view or modify the data of another function consumer. Instead, use a default argument (like None) to indicate that no argument was provided and instantiate a new dictionary at that time. For example: `if $D is None: $D = {}`.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "references": [
+          "https://docs.python-guide.org/writing/gotchas/#mutable-default-arguments"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "qNUjqR",
+            "url": "https://semgrep.dev/playground/r/DkTwll/python.lang.correctness.common-mistakes.default-mutable-dict.default-mutable-dict",
+            "version_id": "DkTwll"
+          }
+        },
+        "shortlink": "https://sg.run/Av4p",
+        "source": "https://semgrep.dev/r/python.lang.correctness.common-mistakes.default-mutable-dict.default-mutable-dict",
+        "technology": [
+          "python"
+        ]
+      },
+      "options": {
+        "symbolic_propagation": true
+      },
+      "patterns": [
+        {
+          "pattern-not-inside": "def $A(...):\n  ...\n  def $F(..., $D={}, ...):\n    ...\n"
+        },
+        {
+          "pattern-inside": "def $F(..., $D={}, ...):\n  ...\n"
+        },
+        {
+          "pattern-not-inside": "$D = {}\n...\n"
+        },
+        {
+          "pattern-not-inside": "$D = dict(...)\n...\n"
+        },
+        {
+          "pattern-not-inside": "$D = $D.copy()\n...\n"
+        },
+        {
+          "pattern-not-inside": "$D = copy.deepcopy($D)\n...\n"
+        },
+        {
+          "pattern-not-inside": "$D = copy.copy($D)\n...\n"
+        },
+        {
+          "pattern-not-inside": "$D = dict.copy($D)\n...\n"
+        },
+        {
+          "pattern-not-inside": "$D = {... for ... in ...}\n...\n"
+        },
+        {
+          "pattern-not-inside": "$D = $D or {}\n...\n"
+        },
+        {
+          "pattern-either": [
+            {
+              "pattern": "$D[...] = ...\n"
+            },
+            {
+              "pattern": "$D.update(...)\n"
+            },
+            {
+              "pattern": "$D.setdefault(...)\n"
+            }
+          ]
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.sqlalchemy.correctness.bad-operator-in-filter.bad-operator-in-filter",
+      "languages": [
+        "python"
+      ],
+      "message": "Only comparison operators should be used inside SQLAlchemy filter expressions. Use `==` instead of `is`, `!=` instead of `is not`, `sqlalchemy.and_` instead of `and`, `sqlalchemy.or_` instead of `or`, `sqlalchemy.not_` instead of `not`, and `sqlalchemy.in_` instead of `in_`.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "references": [
+          "https://docs.sqlalchemy.org/en/13/orm/tutorial.html#common-filter-operators"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "5rU4JE",
+            "url": "https://semgrep.dev/playground/r/3ZTLvW/python.sqlalchemy.correctness.bad-operator-in-filter.bad-operator-in-filter",
+            "version_id": "3ZTLvW"
+          }
+        },
+        "shortlink": "https://sg.run/0nLv",
+        "source": "https://semgrep.dev/r/python.sqlalchemy.correctness.bad-operator-in-filter.bad-operator-in-filter",
+        "technology": [
+          "sqlalchemy"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-inside": "def $ANY(...):\n    ...\n    $MODEL.query\n"
+        },
+        {
+          "pattern-inside": "$TARGET.filter(...)\n"
+        },
+        {
+          "pattern-either": [
+            {
+              "pattern": "not $A"
+            },
+            {
+              "pattern": "$A is $B"
+            },
+            {
+              "pattern": "$A is not $B"
+            },
+            {
+              "pattern": "$A and $B"
+            },
+            {
+              "pattern": "$A or $B"
+            },
+            {
+              "pattern": "$A in $B"
+            },
+            {
+              "pattern": "$A not in $B"
+            }
+          ]
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.lang.correctness.tempfile.mktemp.tempfile-insecure",
+      "languages": [
+        "python"
+      ],
+      "message": "Use tempfile.NamedTemporaryFile instead. From the official Python documentation: THIS FUNCTION IS UNSAFE AND SHOULD NOT BE USED. The file name may refer to a file that did not exist at some point, but by the time you get around to creating it, someone else may have beaten you to the punch.",
+      "metadata": {
+        "category": "correctness",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "X5U83p",
+            "url": "https://semgrep.dev/playground/r/ExT1xk/python.lang.correctness.tempfile.mktemp.tempfile-insecure",
+            "version_id": "ExT1xk"
+          }
+        },
+        "shortlink": "https://sg.run/Yvye",
+        "source": "https://semgrep.dev/r/python.lang.correctness.tempfile.mktemp.tempfile-insecure",
+        "technology": [
+          "python"
+        ]
+      },
+      "pattern": "tempfile.mktemp(...)",
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.django.performance.upsell_earliest_latest.use-earliest-or-latest",
+      "languages": [
+        "python"
+      ],
+      "message": "Looks like you are only accessing first element of an ordered QuerySet. Use `latest()` or `earliest()` instead. See https://docs.djangoproject.com/en/3.0/ref/models/querysets/#django.db.models.query.QuerySet.latest",
+      "metadata": {
+        "category": "performance",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "x8UnX2",
+            "url": "https://semgrep.dev/playground/r/NdTewr/python.django.performance.upsell_earliest_latest.use-earliest-or-latest",
+            "version_id": "NdTewr"
+          }
+        },
+        "shortlink": "https://sg.run/1ZoG",
+        "source": "https://semgrep.dev/r/python.django.performance.upsell_earliest_latest.use-earliest-or-latest",
+        "technology": [
+          "django"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "$X.objects.order_by(...)[0]"
+        },
+        {
+          "pattern": "$X.objects.$FUNC(...).order_by(...)[0]"
+        },
+        {
+          "pattern": "$X.objects.$FUNC(...).$FILTER(...).order_by(...)[0]"
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "go.lang.maintainability.useless-ifelse.useless-if-body",
+      "languages": [
+        "go"
+      ],
+      "message": "Detected identical statements in the if body and the else body of an if-statement. This will lead to the same code being executed no matter what the if-expression evaluates to. Instead, remove the if statement.",
+      "metadata": {
+        "category": "maintainability",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "YGURWJ",
+            "url": "https://semgrep.dev/playground/r/d6T6Oz/go.lang.maintainability.useless-ifelse.useless-if-body",
+            "version_id": "d6T6Oz"
+          }
+        },
+        "shortlink": "https://sg.run/5Q53",
+        "source": "https://semgrep.dev/r/go.lang.maintainability.useless-ifelse.useless-if-body",
+        "technology": [
+          "go"
+        ]
+      },
+      "pattern": "if ($X) {\n    $S\n} else {\n    $S\n}\n",
+      "severity": "WARNING"
+    }
+  ]
+}

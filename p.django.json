@@ -1,0 +1,2085 @@
+{
+  "rules": [
+    {
+      "id": "python.django.security.audit.csrf-exempt.no-csrf-exempt",
+      "languages": [
+        "python"
+      ],
+      "message": "Detected usage of @csrf_exempt, which indicates that there is no CSRF token set for this route. This could lead to an attacker manipulating the user's account and exfiltration of private data. Instead, create a function without this decorator.",
+      "metadata": {
+        "category": "security",
+        "confidence": "LOW",
+        "cwe": [
+          "CWE-352: Cross-Site Request Forgery (CSRF)"
+        ],
+        "cwe2021-top25": true,
+        "cwe2022-top25": true,
+        "impact": "MEDIUM",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "likelihood": "LOW",
+        "owasp": [
+          "A01:2021 - Broken Access Control"
+        ],
+        "references": [
+          "https://owasp.org/Top10/A01_2021-Broken_Access_Control"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "v8UnqO",
+            "url": "https://semgrep.dev/playground/r/WrT6v8/python.django.security.audit.csrf-exempt.no-csrf-exempt",
+            "version_id": "WrT6v8"
+          }
+        },
+        "shortlink": "https://sg.run/rd5e",
+        "source": "https://semgrep.dev/r/python.django.security.audit.csrf-exempt.no-csrf-exempt",
+        "subcategory": [
+          "vuln"
+        ],
+        "technology": [
+          "django"
+        ]
+      },
+      "pattern": "@django.views.decorators.csrf.csrf_exempt\ndef $R(...):\n  ...\n",
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.django.security.audit.query-set-extra.avoid-query-set-extra",
+      "languages": [
+        "python"
+      ],
+      "message": "QuerySet.extra' does not provide safeguards against SQL injection and requires very careful use. SQL injection can lead to critical data being stolen by attackers. Instead of using '.extra', use the Django ORM and parameterized queries such as `People.objects.get(name='Bob')`.",
+      "metadata": {
+        "category": "security",
+        "confidence": "LOW",
+        "cwe": [
+          "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+        ],
+        "cwe2021-top25": true,
+        "cwe2022-top25": true,
+        "impact": "HIGH",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "likelihood": "LOW",
+        "owasp": [
+          "A01:2017 - Injection",
+          "A03:2021 - Injection"
+        ],
+        "references": [
+          "https://docs.djangoproject.com/en/3.0/ref/models/querysets/#django.db.models.query.QuerySet.extra",
+          "https://blog.r2c.dev/2020/preventing-sql-injection-a-django-authors-perspective/"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "nJUzBP",
+            "url": "https://semgrep.dev/playground/r/YDT8J8/python.django.security.audit.query-set-extra.avoid-query-set-extra",
+            "version_id": "YDT8J8"
+          }
+        },
+        "shortlink": "https://sg.run/kXZP",
+        "source": "https://semgrep.dev/r/python.django.security.audit.query-set-extra.avoid-query-set-extra",
+        "source-rule-url": "https://bandit.readthedocs.io/en/latest/plugins/b610_django_extra_used.html",
+        "subcategory": [
+          "audit"
+        ],
+        "technology": [
+          "django"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern": "$MODEL.extra(...)"
+        },
+        {
+          "pattern-not-inside": "$MODEL.extra(select = {$KEY: \"...\"})"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.django.security.injection.code.user-eval.user-eval",
+      "languages": [
+        "python"
+      ],
+      "message": "Found user data in a call to 'eval'. This is extremely dangerous because it can enable an attacker to execute arbitrary remote code on the system. Instead, refactor your code to not use 'eval' and instead use a safe library for the specific functionality you need.",
+      "metadata": {
+        "category": "security",
+        "confidence": "MEDIUM",
+        "cwe": [
+          "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+        ],
+        "impact": "HIGH",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "likelihood": "MEDIUM",
+        "owasp": [
+          "A03:2021 - Injection"
+        ],
+        "references": [
+          "https://nedbatchelder.com/blog/201206/eval_really_is_dangerous.html",
+          "https://owasp.org/www-community/attacks/Code_Injection"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "DbUpDQ",
+            "url": "https://semgrep.dev/playground/r/ExTYJB/python.django.security.injection.code.user-eval.user-eval",
+            "version_id": "ExTYJB"
+          }
+        },
+        "shortlink": "https://sg.run/PJDW",
+        "source": "https://semgrep.dev/r/python.django.security.injection.code.user-eval.user-eval",
+        "subcategory": [
+          "vuln"
+        ],
+        "technology": [
+          "django"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-inside": "def $F(...):\n  ...\n"
+        },
+        {
+          "pattern-either": [
+            {
+              "pattern": "eval(..., request.$W.get(...), ...)"
+            },
+            {
+              "pattern": "$V = request.$W.get(...)\n...\neval(..., $V, ...)\n"
+            },
+            {
+              "pattern": "eval(..., request.$W(...), ...)"
+            },
+            {
+              "pattern": "$V = request.$W(...)\n...\neval(..., $V, ...)\n"
+            },
+            {
+              "pattern": "eval(..., request.$W[...], ...)"
+            },
+            {
+              "pattern": "$V = request.$W[...]\n...\neval(..., $V, ...)\n"
+            }
+          ]
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.django.security.injection.code.user-eval-format-string.user-eval-format-string",
+      "languages": [
+        "python"
+      ],
+      "message": "Found user data in a call to 'eval'. This is extremely dangerous because it can enable an attacker to execute remote code. See https://owasp.org/www-community/attacks/Code_Injection for more information.",
+      "metadata": {
+        "category": "security",
+        "confidence": "MEDIUM",
+        "cwe": [
+          "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+        ],
+        "impact": "HIGH",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "likelihood": "MEDIUM",
+        "owasp": [
+          "A03:2021 - Injection"
+        ],
+        "references": [
+          "https://nedbatchelder.com/blog/201206/eval_really_is_dangerous.html"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "BYUNw9",
+            "url": "https://semgrep.dev/playground/r/nWTwBe/python.django.security.injection.code.user-eval-format-string.user-eval-format-string",
+            "version_id": "nWTwBe"
+          }
+        },
+        "shortlink": "https://sg.run/4x2z",
+        "source": "https://semgrep.dev/r/python.django.security.injection.code.user-eval-format-string.user-eval-format-string",
+        "subcategory": [
+          "vuln"
+        ],
+        "technology": [
+          "django"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-inside": "def $F(...):\n  ...\n"
+        },
+        {
+          "pattern-either": [
+            {
+              "pattern": "eval(..., $STR % request.$W.get(...), ...)"
+            },
+            {
+              "pattern": "$V = request.$W.get(...)\n...\neval(..., $STR % $V, ...)\n"
+            },
+            {
+              "pattern": "$V = request.$W.get(...)\n...\n$S = $STR % $V\n...\neval(..., $S, ...)\n"
+            },
+            {
+              "pattern": "eval(..., \"...\" % request.$W(...), ...)"
+            },
+            {
+              "pattern": "$V = request.$W(...)\n...\neval(..., $STR % $V, ...)\n"
+            },
+            {
+              "pattern": "$V = request.$W(...)\n...\n$S = $STR % $V\n...\neval(..., $S, ...)\n"
+            },
+            {
+              "pattern": "eval(..., $STR % request.$W[...], ...)"
+            },
+            {
+              "pattern": "$V = request.$W[...]\n...\neval(..., $STR % $V, ...)\n"
+            },
+            {
+              "pattern": "$V = request.$W[...]\n...\n$S = $STR % $V\n...\neval(..., $S, ...)\n"
+            },
+            {
+              "pattern": "eval(..., $STR.format(..., request.$W.get(...), ...), ...)"
+            },
+            {
+              "pattern": "$V = request.$W.get(...)\n...\neval(..., $STR.format(..., $V, ...), ...)\n"
+            },
+            {
+              "pattern": "$V = request.$W.get(...)\n...\n$S = $STR.format(..., $V, ...)\n...\neval(..., $S, ...)\n"
+            },
+            {
+              "pattern": "eval(..., $STR.format(..., request.$W(...), ...), ...)"
+            },
+            {
+              "pattern": "$V = request.$W(...)\n...\neval(..., $STR.format(..., $V, ...), ...)\n"
+            },
+            {
+              "pattern": "$V = request.$W(...)\n...\n$S = $STR.format(..., $V, ...)\n...\neval(..., $S, ...)\n"
+            },
+            {
+              "pattern": "eval(..., $STR.format(..., request.$W[...], ...), ...)"
+            },
+            {
+              "pattern": "$V = request.$W[...]\n...\neval(..., $STR.format(..., $V, ...), ...)\n"
+            },
+            {
+              "pattern": "$V = request.$W[...]\n...\n$S = $STR.format(..., $V, ...)\n...\neval(..., $S, ...)\n"
+            },
+            {
+              "pattern": "$V = request.$W.get(...)\n...\neval(..., f\"...{$V}...\", ...)\n"
+            },
+            {
+              "pattern": "$V = request.$W.get(...)\n...\n$S = f\"...{$V}...\"\n...\neval(..., $S, ...)\n"
+            },
+            {
+              "pattern": "$V = request.$W(...)\n...\neval(..., f\"...{$V}...\", ...)\n"
+            },
+            {
+              "pattern": "$V = request.$W(...)\n...\n$S = f\"...{$V}...\"\n...\neval(..., $S, ...)\n"
+            },
+            {
+              "pattern": "$V = request.$W[...]\n...\neval(..., f\"...{$V}...\", ...)\n"
+            },
+            {
+              "pattern": "$V = request.$W[...]\n...\n$S = f\"...{$V}...\"\n...\neval(..., $S, ...)\n"
+            }
+          ]
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.django.security.audit.extends-custom-expression.extends-custom-expression",
+      "languages": [
+        "python"
+      ],
+      "message": "Found extension of custom expression: $CLASS. Extending expressions in this way could inadvertently lead to a SQL injection vulnerability, which can result in attackers exfiltrating sensitive data. Instead, ensure no user input enters this function or that user input is properly sanitized.",
+      "metadata": {
+        "category": "security",
+        "confidence": "LOW",
+        "cwe": [
+          "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+        ],
+        "cwe2021-top25": true,
+        "cwe2022-top25": true,
+        "impact": "HIGH",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "likelihood": "LOW",
+        "owasp": [
+          "A01:2017 - Injection",
+          "A03:2021 - Injection"
+        ],
+        "references": [
+          "https://docs.djangoproject.com/en/3.0/ref/models/expressions/#avoiding-sql-injection",
+          "https://blog.r2c.dev/2020/preventing-sql-injection-a-django-authors-perspective/"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "ZqU5z3",
+            "url": "https://semgrep.dev/playground/r/l4TN72/python.django.security.audit.extends-custom-expression.extends-custom-expression",
+            "version_id": "l4TN72"
+          }
+        },
+        "shortlink": "https://sg.run/N4Ay",
+        "source": "https://semgrep.dev/r/python.django.security.audit.extends-custom-expression.extends-custom-expression",
+        "subcategory": [
+          "audit"
+        ],
+        "technology": [
+          "django"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "class $CLASS(..., django.db.models.Func, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.expressions.Func, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.Expression, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.expressions.Expression, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.Value, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.expressions.Value, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.DurationValue, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.expressions.DurationValue, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.RawSQL, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.expressions.RawSQL, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.Star, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.expressions.Star, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.Random, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.expressions.Random, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.Col, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.expressions.Col, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.Ref, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.expressions.Ref, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.ExpressionList, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.expressions.ExpressionList, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.ExpressionWrapper, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.expressions.ExpressionWrapper, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.When, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.expressions.When, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.Case, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.expressions.Case, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.Subquery, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.expressions.Subquery, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.Exists, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.expressions.Exists, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.Window, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.expressions.Window, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.WindowFrame, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.expressions.WindowFrame, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.RowRange, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.expressions.RowRange, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.ValueRange, ...):\n    ...\n"
+        },
+        {
+          "pattern": "class $CLASS(..., django.db.models.expressions.ValueRange, ...):\n    ...\n"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.django.security.audit.avoid-insecure-deserialization.avoid-insecure-deserialization",
+      "languages": [
+        "python"
+      ],
+      "message": "Avoid using insecure deserialization library, backed by `pickle`, `_pickle`, `cpickle`, `dill`, `shelve`, or `yaml`, which are known to lead to remote code execution vulnerabilities.",
+      "metadata": {
+        "category": "security",
+        "confidence": "MEDIUM",
+        "cwe": [
+          "CWE-502: Deserialization of Untrusted Data"
+        ],
+        "cwe2021-top25": true,
+        "cwe2022-top25": true,
+        "impact": "MEDIUM",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "likelihood": "MEDIUM",
+        "owasp": [
+          "A08:2017 - Insecure Deserialization",
+          "A08:2021 - Software and Data Integrity Failures"
+        ],
+        "references": [
+          "https://docs.python.org/3/library/pickle.html"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "OrU3e6",
+            "url": "https://semgrep.dev/playground/r/BjTGwp/python.django.security.audit.avoid-insecure-deserialization.avoid-insecure-deserialization",
+            "version_id": "BjTGwp"
+          }
+        },
+        "shortlink": "https://sg.run/9oyr",
+        "source": "https://semgrep.dev/r/python.django.security.audit.avoid-insecure-deserialization.avoid-insecure-deserialization",
+        "subcategory": [
+          "vuln"
+        ],
+        "technology": [
+          "django"
+        ]
+      },
+      "mode": "taint",
+      "pattern-sinks": [
+        {
+          "pattern-either": [
+            {
+              "patterns": [
+                {
+                  "pattern-either": [
+                    {
+                      "pattern": "pickle.$PICKLEFUNC(...)\n"
+                    },
+                    {
+                      "pattern": "_pickle.$PICKLEFUNC(...)\n"
+                    },
+                    {
+                      "pattern": "cPickle.$PICKLEFUNC(...)\n"
+                    },
+                    {
+                      "pattern": "shelve.$PICKLEFUNC(...)\n"
+                    }
+                  ]
+                },
+                {
+                  "metavariable-regex": {
+                    "metavariable": "$PICKLEFUNC",
+                    "regex": "dumps|dump|load|loads"
+                  }
+                }
+              ]
+            },
+            {
+              "patterns": [
+                {
+                  "pattern": "dill.$DILLFUNC(...)"
+                },
+                {
+                  "metavariable-regex": {
+                    "metavariable": "$DILLFUNC",
+                    "regex": "dump|dump_session|dumps|load|load_session|loads"
+                  }
+                }
+              ]
+            },
+            {
+              "patterns": [
+                {
+                  "pattern": "yaml.$YAMLFUNC(...)"
+                },
+                {
+                  "pattern-not": "yaml.$YAMLFUNC(..., Dumper=SafeDumper, ...)"
+                },
+                {
+                  "pattern-not": "yaml.$YAMLFUNC(..., Dumper=yaml.SafeDumper, ...)"
+                },
+                {
+                  "pattern-not": "yaml.$YAMLFUNC(..., Loader=SafeLoader, ...)"
+                },
+                {
+                  "pattern-not": "yaml.$YAMLFUNC(..., Loader=yaml.SafeLoader, ...)"
+                },
+                {
+                  "metavariable-regex": {
+                    "metavariable": "$YAMLFUNC",
+                    "regex": "dump|dump_all|load|load_all"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "pattern-sources": [
+        {
+          "pattern-either": [
+            {
+              "patterns": [
+                {
+                  "pattern-inside": "def $INSIDE(..., $PARAM, ...):\n  ...\n"
+                },
+                {
+                  "pattern-either": [
+                    {
+                      "pattern": "request.$REQFUNC(...)"
+                    },
+                    {
+                      "pattern": "request.$REQFUNC.get(...)"
+                    },
+                    {
+                      "pattern": "request.$REQFUNC[...]"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.django.security.injection.code.user-exec-format-string.user-exec-format-string",
+      "languages": [
+        "python"
+      ],
+      "message": "Found user data in a call to 'exec'. This is extremely dangerous because it can enable an attacker to execute arbitrary remote code on the system. Instead, refactor your code to not use 'eval' and instead use a safe library for the specific functionality you need.",
+      "metadata": {
+        "category": "security",
+        "confidence": "MEDIUM",
+        "cwe": [
+          "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+        ],
+        "impact": "HIGH",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "likelihood": "MEDIUM",
+        "owasp": [
+          "A03:2021 - Injection"
+        ],
+        "references": [
+          "https://owasp.org/www-community/attacks/Code_Injection"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "WAUovx",
+            "url": "https://semgrep.dev/playground/r/7ZTYLz/python.django.security.injection.code.user-exec-format-string.user-exec-format-string",
+            "version_id": "7ZTYLz"
+          }
+        },
+        "shortlink": "https://sg.run/J9JW",
+        "source": "https://semgrep.dev/r/python.django.security.injection.code.user-exec-format-string.user-exec-format-string",
+        "subcategory": [
+          "vuln"
+        ],
+        "technology": [
+          "django"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-inside": "def $F(...):\n  ...\n"
+        },
+        {
+          "pattern-either": [
+            {
+              "pattern": "exec(..., $STR % request.$W.get(...), ...)"
+            },
+            {
+              "pattern": "$V = request.$W.get(...)\n...\nexec(..., $STR % $V, ...)\n"
+            },
+            {
+              "pattern": "$V = request.$W.get(...)\n...\n$S = $STR % $V\n...\nexec(..., $S, ...)\n"
+            },
+            {
+              "pattern": "exec(..., \"...\" % request.$W(...), ...)"
+            },
+            {
+              "pattern": "$V = request.$W(...)\n...\nexec(..., $STR % $V, ...)\n"
+            },
+            {
+              "pattern": "$V = request.$W(...)\n...\n$S = $STR % $V\n...\nexec(..., $S, ...)\n"
+            },
+            {
+              "pattern": "exec(..., $STR % request.$W[...], ...)"
+            },
+            {
+              "pattern": "$V = request.$W[...]\n...\nexec(..., $STR % $V, ...)\n"
+            },
+            {
+              "pattern": "$V = request.$W[...]\n...\n$S = $STR % $V\n...\nexec(..., $S, ...)\n"
+            },
+            {
+              "pattern": "exec(..., $STR.format(..., request.$W.get(...), ...), ...)"
+            },
+            {
+              "pattern": "$V = request.$W.get(...)\n...\nexec(..., $STR.format(..., $V, ...), ...)\n"
+            },
+            {
+              "pattern": "$V = request.$W.get(...)\n...\n$S = $STR.format(..., $V, ...)\n...\nexec(..., $S, ...)\n"
+            },
+            {
+              "pattern": "exec(..., $STR.format(..., request.$W(...), ...), ...)"
+            },
+            {
+              "pattern": "$V = request.$W(...)\n...\nexec(..., $STR.format(..., $V, ...), ...)\n"
+            },
+            {
+              "pattern": "$V = request.$W(...)\n...\n$S = $STR.format(..., $V, ...)\n...\nexec(..., $S, ...)\n"
+            },
+            {
+              "pattern": "exec(..., $STR.format(..., request.$W[...], ...), ...)"
+            },
+            {
+              "pattern": "$V = request.$W[...]\n...\nexec(..., $STR.format(..., $V, ...), ...)\n"
+            },
+            {
+              "pattern": "$V = request.$W[...]\n...\n$S = $STR.format(..., $V, ...)\n...\nexec(..., $S, ...)\n"
+            },
+            {
+              "pattern": "$V = request.$W.get(...)\n...\nexec(..., f\"...{$V}...\", ...)\n"
+            },
+            {
+              "pattern": "$V = request.$W.get(...)\n...\n$S = f\"...{$V}...\"\n...\nexec(..., $S, ...)\n"
+            },
+            {
+              "pattern": "$V = request.$W(...)\n...\nexec(..., f\"...{$V}...\", ...)\n"
+            },
+            {
+              "pattern": "$V = request.$W(...)\n...\n$S = f\"...{$V}...\"\n...\nexec(..., $S, ...)\n"
+            },
+            {
+              "pattern": "$V = request.$W[...]\n...\nexec(..., f\"...{$V}...\", ...)\n"
+            },
+            {
+              "pattern": "$V = request.$W[...]\n...\n$S = f\"...{$V}...\"\n...\nexec(..., $S, ...)\n"
+            },
+            {
+              "pattern": "exec(..., base64.decodestring($S.format(..., request.$W.get(...), ...), ...), ...)"
+            },
+            {
+              "pattern": "exec(..., base64.decodestring($S % request.$W.get(...), ...), ...)"
+            },
+            {
+              "pattern": "exec(..., base64.decodestring(f\"...{request.$W.get(...)}...\", ...), ...)"
+            },
+            {
+              "pattern": "exec(..., base64.decodestring(request.$W.get(...), ...), ...)"
+            },
+            {
+              "pattern": "exec(..., base64.decodestring(bytes($S.format(..., request.$W.get(...), ...), ...), ...), ...)"
+            },
+            {
+              "pattern": "exec(..., base64.decodestring(bytes($S % request.$W.get(...), ...), ...), ...)"
+            },
+            {
+              "pattern": "exec(..., base64.decodestring(bytes(f\"...{request.$W.get(...)}...\", ...), ...), ...)"
+            },
+            {
+              "pattern": "exec(..., base64.decodestring(bytes(request.$W.get(...), ...), ...), ...)"
+            },
+            {
+              "pattern": "$DATA = request.$W.get(...)\n...\nexec(..., base64.decodestring($DATA, ...), ...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W.get(...)\n...\n$INTERM = base64.decodestring($DATA, ...)\n...\nexec(..., $INTERM, ...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W.get(...)\n...\nexec(..., base64.decodestring(bytes($DATA, ...), ...), ...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W.get(...)\n...\n$INTERM = base64.decodestring(bytes($DATA, ...), ...)\n...\nexec(..., $INTERM, ...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W(...)\n...\nexec(..., base64.decodestring($DATA, ...), ...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W(...)\n...\n$INTERM = base64.decodestring($DATA, ...)\n...\nexec(..., $INTERM, ...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W(...)\n...\nexec(..., base64.decodestring(bytes($DATA, ...), ...), ...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W(...)\n...\n$INTERM = base64.decodestring(bytes($DATA, ...), ...)\n...\nexec(..., $INTERM, ...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W[...]\n...\nexec(..., base64.decodestring($DATA, ...), ...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W[...]\n...\n$INTERM = base64.decodestring($DATA, ...)\n...\nexec(..., $INTERM, ...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W[...]\n...\nexec(..., base64.decodestring(bytes($DATA, ...), ...), ...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W[...]\n...\n$INTERM = base64.decodestring(bytes($DATA, ...), ...)\n...\nexec(..., $INTERM, ...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W\n...\nexec(..., base64.decodestring($DATA, ...), ...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W\n...\n$INTERM = base64.decodestring($DATA, ...)\n...\nexec(..., $INTERM, ...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W\n...\nexec(..., base64.decodestring(bytes($DATA, ...), ...), ...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W\n...\n$INTERM = base64.decodestring(bytes($DATA, ...), ...)\n...\nexec(..., $INTERM, ...)\n"
+            }
+          ]
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.django.security.injection.mass-assignment.mass-assignment",
+      "languages": [
+        "python"
+      ],
+      "message": "Mass assignment detected. This can result in assignment to model fields that are unintended and can be exploited by an attacker. Instead of using '**request.$W', assign each field you want to edit individually to prevent mass assignment. You can read more about mass assignment at https://cheatsheetseries.owasp.org/cheatsheets/Mass_Assignment_Cheat_Sheet.html.",
+      "metadata": {
+        "category": "security",
+        "confidence": "LOW",
+        "cwe": [
+          "CWE-915: Improperly Controlled Modification of Dynamically-Determined Object Attributes"
+        ],
+        "impact": "MEDIUM",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "likelihood": "LOW",
+        "owasp": [
+          "A08:2021 - Software and Data Integrity Failures"
+        ],
+        "owaspapi": "API6: Mass Assignment",
+        "references": [
+          "https://cheatsheetseries.owasp.org/cheatsheets/Mass_Assignment_Cheat_Sheet.html"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "lBU97n",
+            "url": "https://semgrep.dev/playground/r/PkTnpo/python.django.security.injection.mass-assignment.mass-assignment",
+            "version_id": "PkTnpo"
+          }
+        },
+        "shortlink": "https://sg.run/Ro0q",
+        "source": "https://semgrep.dev/r/python.django.security.injection.mass-assignment.mass-assignment",
+        "subcategory": [
+          "audit"
+        ],
+        "technology": [
+          "django"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "$MODEL.objects.create(**request.$W)"
+        },
+        {
+          "pattern": "$OBJ.update(**request.$W)\n...\n$OBJ.save()\n"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.django.security.audit.raw-query.avoid-raw-sql",
+      "languages": [
+        "python"
+      ],
+      "message": "Detected the use of 'RawSQL' or 'raw' indicating the execution of a non-parameterized SQL query. This could lead to a SQL injection and therefore protected information could be leaked. Instead, use Django ORM and parameterized queries before raw SQL. An example of using the Django ORM is: `People.objects.get(name='Bob')`",
+      "metadata": {
+        "category": "security",
+        "confidence": "LOW",
+        "cwe": [
+          "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+        ],
+        "cwe2021-top25": true,
+        "cwe2022-top25": true,
+        "impact": "HIGH",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "likelihood": "LOW",
+        "owasp": [
+          "A01:2017 - Injection",
+          "A03:2021 - Injection"
+        ],
+        "references": [
+          "https://docs.djangoproject.com/en/3.0/ref/models/expressions/#raw-sql-expressions",
+          "https://blog.r2c.dev/2020/preventing-sql-injection-a-django-authors-perspective/"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "EwU2JA",
+            "url": "https://semgrep.dev/playground/r/rxTXz1/python.django.security.audit.raw-query.avoid-raw-sql",
+            "version_id": "rxTXz1"
+          }
+        },
+        "shortlink": "https://sg.run/weDA",
+        "source": "https://semgrep.dev/r/python.django.security.audit.raw-query.avoid-raw-sql",
+        "source-rule-url": "https://bandit.readthedocs.io/en/latest/plugins/b611_django_rawsql_used.html",
+        "subcategory": [
+          "audit"
+        ],
+        "technology": [
+          "django"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-either": [
+            {
+              "pattern": "$MODEL.objects.raw($QUERY, ...)"
+            },
+            {
+              "pattern": "django.db.models.expressions.RawSQL(...)"
+            }
+          ]
+        },
+        {
+          "pattern-not": "$MODEL.objects.raw(\"...\")"
+        },
+        {
+          "pattern-not": "django.db.models.expressions.RawSQL(\"...\")"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.django.security.audit.custom-expression-as-sql.custom-expression-as-sql",
+      "languages": [
+        "python"
+      ],
+      "message": "Detected a Custom Expression ''$EXPRESSION'' calling ''as_sql(...).'' This could lead to SQL injection, which can result in attackers exfiltrating sensitive data. Instead, ensure no user input enters this function or that user input is properly sanitized.",
+      "metadata": {
+        "category": "security",
+        "confidence": "LOW",
+        "cwe": [
+          "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+        ],
+        "cwe2021-top25": true,
+        "cwe2022-top25": true,
+        "impact": "HIGH",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "likelihood": "LOW",
+        "owasp": [
+          "A01:2017 - Injection",
+          "A03:2021 - Injection"
+        ],
+        "references": [
+          "https://docs.djangoproject.com/en/3.0/ref/models/expressions/#django.db.models.Func.as_sql",
+          "https://blog.r2c.dev/2020/preventing-sql-injection-a-django-authors-perspective/"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "d8Ujk6",
+            "url": "https://semgrep.dev/playground/r/0bT6AG/python.django.security.audit.custom-expression-as-sql.custom-expression-as-sql",
+            "version_id": "0bT6AG"
+          }
+        },
+        "shortlink": "https://sg.run/b7bW",
+        "source": "https://semgrep.dev/r/python.django.security.audit.custom-expression-as-sql.custom-expression-as-sql",
+        "subcategory": [
+          "audit"
+        ],
+        "technology": [
+          "django"
+        ]
+      },
+      "pattern": "$EXPRESSION.as_sql(...)",
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.django.performance.upsell-count.use-count-method",
+      "languages": [
+        "python"
+      ],
+      "message": "Looks like you need to determine the number of records. Django provides the count() method which is more efficient than .len(). See https://docs.djangoproject.com/en/3.0/ref/models/querysets/",
+      "metadata": {
+        "category": "performance",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "wdUJZ8",
+            "url": "https://semgrep.dev/playground/r/bZTLjl/python.django.performance.upsell-count.use-count-method",
+            "version_id": "bZTLjl"
+          }
+        },
+        "shortlink": "https://sg.run/jRdN",
+        "source": "https://semgrep.dev/r/python.django.performance.upsell-count.use-count-method",
+        "technology": [
+          "django"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "$X.objects.$FUNC(...).len()"
+        },
+        {
+          "pattern": "$X.objects.$FUNC(...).$FILTER().len()"
+        },
+        {
+          "pattern": "$X.objects.$FUNC(...).$FILTER().$UPDATE(...).len()"
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.django.security.audit.secure-cookies.django-secure-set-cookie",
+      "languages": [
+        "python"
+      ],
+      "message": "Django cookies should be handled securely by setting secure=True, httponly=True, and samesite='Lax' in response.set_cookie(...). If your situation calls for different settings, explicitly disable the setting. If you want to send the cookie over http, set secure=False. If you want to let client-side JavaScript read the cookie, set httponly=False. If you want to attach cookies to requests for external sites, set samesite=None.",
+      "metadata": {
+        "asvs": {
+          "control_id": "3.4 Missing Cookie Attributes",
+          "control_url": "https://github.com/OWASP/ASVS/blob/master/4.0/en/0x12-V3-Session-management.md#v34-cookie-based-session-management",
+          "section": "V3: Session Management Verification Requirements",
+          "version": "4"
+        },
+        "category": "security",
+        "confidence": "LOW",
+        "cwe": [
+          "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
+        ],
+        "impact": "LOW",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "likelihood": "LOW",
+        "owasp": [
+          "A05:2021 - Security Misconfiguration"
+        ],
+        "references": [
+          "https://docs.djangoproject.com/en/3.0/ref/request-response/#django.http.HttpResponse.set_cookie",
+          "https://blog.r2c.dev/2020/bento-check-keeping-cookies-safe-in-flask/",
+          "https://bento.dev/checks/flask/secure-set-cookie/"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "7KUQ2E",
+            "url": "https://semgrep.dev/playground/r/BjTOxE/python.django.security.audit.secure-cookies.django-secure-set-cookie",
+            "version_id": "BjTOxE"
+          }
+        },
+        "shortlink": "https://sg.run/x1WL",
+        "source": "https://semgrep.dev/r/python.django.security.audit.secure-cookies.django-secure-set-cookie",
+        "subcategory": [
+          "audit"
+        ],
+        "technology": [
+          "django"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-either": [
+            {
+              "pattern-inside": "import django.http.HttpResponse\n...\n"
+            },
+            {
+              "pattern-inside": "import django.shortcuts.render\n...\n"
+            }
+          ]
+        },
+        {
+          "pattern-not-inside": "LANGUAGE_QUERY_PARAMETER = 'language'\n...\ndef set_language(request):\n    ...\n# Exclude vendored contrib/messages/storage/cookie.py\n"
+        },
+        {
+          "pattern-not-inside": "class CookieStorage(django.contrib.messages.storage.base.BaseStorage):\n    ...\n# Exclude cookies handled by vendored middleware\n"
+        },
+        {
+          "pattern-not": "response.set_cookie(django.conf.settings.SESSION_COOKIE_NAME, ...)"
+        },
+        {
+          "pattern-not": "response.set_cookie(django.conf.settings.CSRF_COOKIE_NAME, ...)"
+        },
+        {
+          "pattern-not": "response.set_cookie(django.conf.settings.LANGUAGE_COOKIE_NAME, ...)"
+        },
+        {
+          "pattern-not": "response.set_cookie(rest_framework_jwt.settings.api_settings.JWT_AUTH_COOKIE, ...)"
+        },
+        {
+          "pattern-not": "response.set_cookie(..., secure=$A, httponly=$B, samesite=$C, ...)"
+        },
+        {
+          "pattern-not": "response.set_cookie(..., **$A)"
+        },
+        {
+          "pattern": "response.set_cookie(...)"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "fix": "None\n",
+      "id": "python.django.security.passwords.use-none-for-password-default.use-none-for-password-default",
+      "languages": [
+        "python"
+      ],
+      "message": "'$VAR' is using the empty string as its default and is being used to set the password on '$MODEL'. If you meant to set an unusable password, set the default value to 'None' or call 'set_unusable_password()'.",
+      "metadata": {
+        "category": "security",
+        "confidence": "MEDIUM",
+        "cwe": [
+          "CWE-521: Weak Password Requirements"
+        ],
+        "impact": "MEDIUM",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "likelihood": "MEDIUM",
+        "owasp": [
+          "A07:2021 - Identification and Authentication Failures"
+        ],
+        "references": [
+          "https://docs.djangoproject.com/en/3.0/ref/contrib/auth/#django.contrib.auth.models.User.set_password"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "yyUn6Z",
+            "url": "https://semgrep.dev/playground/r/qkTgLQ/python.django.security.passwords.use-none-for-password-default.use-none-for-password-default",
+            "version_id": "qkTgLQ"
+          }
+        },
+        "shortlink": "https://sg.run/zvBW",
+        "source": "https://semgrep.dev/r/python.django.security.passwords.use-none-for-password-default.use-none-for-password-default",
+        "subcategory": [
+          "vuln"
+        ],
+        "technology": [
+          "django"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-either": [
+            {
+              "pattern": "$VAR = request.$W.get($X, $EMPTY)\n...\n$MODEL.set_password($VAR)\n...\n$MODEL.save(...)\n"
+            },
+            {
+              "pattern": "def $F(..., $VAR=$EMPTY, ...):\n  ...\n  $MODEL.set_password($VAR)\n"
+            }
+          ]
+        },
+        {
+          "focus-metavariable": "$EMPTY"
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.django.performance.upsell_earliest_latest.use-earliest-or-latest",
+      "languages": [
+        "python"
+      ],
+      "message": "Looks like you are only accessing first element of an ordered QuerySet. Use `latest()` or `earliest()` instead. See https://docs.djangoproject.com/en/3.0/ref/models/querysets/#django.db.models.query.QuerySet.latest",
+      "metadata": {
+        "category": "performance",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "x8UnX2",
+            "url": "https://semgrep.dev/playground/r/NdTewr/python.django.performance.upsell_earliest_latest.use-earliest-or-latest",
+            "version_id": "NdTewr"
+          }
+        },
+        "shortlink": "https://sg.run/1ZoG",
+        "source": "https://semgrep.dev/r/python.django.performance.upsell_earliest_latest.use-earliest-or-latest",
+        "technology": [
+          "django"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "$X.objects.order_by(...)[0]"
+        },
+        {
+          "pattern": "$X.objects.$FUNC(...).order_by(...)[0]"
+        },
+        {
+          "pattern": "$X.objects.$FUNC(...).$FILTER(...).order_by(...)[0]"
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.django.security.injection.code.user-exec.user-exec",
+      "languages": [
+        "python"
+      ],
+      "message": "Found user data in a call to 'exec'. This is extremely dangerous because it can enable an attacker to execute arbitrary remote code on the system. Instead, refactor your code to not use 'eval' and instead use a safe library for the specific functionality you need.",
+      "metadata": {
+        "category": "security",
+        "confidence": "MEDIUM",
+        "cwe": [
+          "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+        ],
+        "impact": "HIGH",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "likelihood": "MEDIUM",
+        "owasp": [
+          "A03:2021 - Injection"
+        ],
+        "references": [
+          "https://owasp.org/www-community/attacks/Code_Injection"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "0oU5AW",
+            "url": "https://semgrep.dev/playground/r/LjTp1q/python.django.security.injection.code.user-exec.user-exec",
+            "version_id": "LjTp1q"
+          }
+        },
+        "shortlink": "https://sg.run/5Q3X",
+        "source": "https://semgrep.dev/r/python.django.security.injection.code.user-exec.user-exec",
+        "subcategory": [
+          "vuln"
+        ],
+        "technology": [
+          "django"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-inside": "def $F(...):\n  ...\n"
+        },
+        {
+          "pattern-either": [
+            {
+              "pattern": "exec(..., request.$W.get(...), ...)"
+            },
+            {
+              "pattern": "$V = request.$W.get(...)\n...\nexec(..., $V, ...)\n"
+            },
+            {
+              "pattern": "exec(..., request.$W(...), ...)"
+            },
+            {
+              "pattern": "$V = request.$W(...)\n...\nexec(..., $V, ...)\n"
+            },
+            {
+              "pattern": "exec(..., request.$W[...], ...)"
+            },
+            {
+              "pattern": "$V = request.$W[...]\n...\nexec(..., $V, ...)\n"
+            },
+            {
+              "pattern": "loop = asyncio.get_running_loop()\n...\nawait loop.run_in_executor(None, exec, request.$W[...])\n"
+            },
+            {
+              "pattern": "$V = request.$W[...]\n...\nloop = asyncio.get_running_loop()\n...\nawait loop.run_in_executor(None, exec, $V)\n"
+            },
+            {
+              "pattern": "loop = asyncio.get_running_loop()\n...\nawait loop.run_in_executor(None, exec, request.$W.get(...))\n"
+            },
+            {
+              "pattern": "$V = request.$W.get(...)\n...\nloop = asyncio.get_running_loop()\n...\nawait loop.run_in_executor(None, exec, $V)\n"
+            }
+          ]
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.django.security.audit.xss.template-autoescape-off.template-autoescape-off",
+      "languages": [
+        "regex"
+      ],
+      "message": "Detected a template block where autoescaping is explicitly disabled with '{% autoescape off %}'. This allows rendering of raw HTML in this segment. Turn autoescaping on to prevent cross-site scripting (XSS). If you must do this, consider instead, using `mark_safe` in Python code.",
+      "metadata": {
+        "category": "security",
+        "confidence": "LOW",
+        "cwe": [
+          "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+        ],
+        "cwe2021-top25": true,
+        "cwe2022-top25": true,
+        "impact": "MEDIUM",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "likelihood": "LOW",
+        "owasp": [
+          "A07:2017 - Cross-Site Scripting (XSS)",
+          "A03:2021 - Injection"
+        ],
+        "references": [
+          "https://docs.djangoproject.com/en/3.1/ref/templates/builtins/#autoescape"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "AbUzAZ",
+            "url": "https://semgrep.dev/playground/r/NdTQ8w/python.django.security.audit.xss.template-autoescape-off.template-autoescape-off",
+            "version_id": "NdTQ8w"
+          }
+        },
+        "shortlink": "https://sg.run/Q5WZ",
+        "source": "https://semgrep.dev/r/python.django.security.audit.xss.template-autoescape-off.template-autoescape-off",
+        "subcategory": [
+          "audit"
+        ],
+        "technology": [
+          "django"
+        ]
+      },
+      "paths": {
+        "include": [
+          "*.html"
+        ]
+      },
+      "pattern-regex": "{%\\s+autoescape\\s+off\\s+%}",
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.flask.security.xss.audit.template-unescaped-with-safe.template-unescaped-with-safe",
+      "languages": [
+        "regex"
+      ],
+      "message": "Detected a segment of a Flask template where autoescaping is explicitly disabled with '| safe' filter. This allows rendering of raw HTML in this segment. Ensure no user data is rendered here, otherwise this is a cross-site scripting (XSS) vulnerability.",
+      "metadata": {
+        "category": "security",
+        "confidence": "LOW",
+        "cwe": [
+          "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+        ],
+        "cwe2021-top25": true,
+        "cwe2022-top25": true,
+        "impact": "MEDIUM",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "likelihood": "LOW",
+        "owasp": [
+          "A07:2017 - Cross-Site Scripting (XSS)",
+          "A03:2021 - Injection"
+        ],
+        "references": [
+          "https://flask.palletsprojects.com/en/1.1.x/security/#cross-site-scripting-xss"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "oqUenz",
+            "url": "https://semgrep.dev/playground/r/QkTQJA/python.flask.security.xss.audit.template-unescaped-with-safe.template-unescaped-with-safe",
+            "version_id": "QkTQJA"
+          }
+        },
+        "shortlink": "https://sg.run/W8og",
+        "source": "https://semgrep.dev/r/python.flask.security.xss.audit.template-unescaped-with-safe.template-unescaped-with-safe",
+        "subcategory": [
+          "audit"
+        ],
+        "technology": [
+          "flask"
+        ]
+      },
+      "paths": {
+        "include": [
+          "*.html"
+        ]
+      },
+      "pattern-regex": "{{.*?\\|\\s*safe(\\s*}})?",
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.django.security.audit.xss.filter-with-is-safe.filter-with-is-safe",
+      "languages": [
+        "python"
+      ],
+      "message": "Detected Django filters flagged with 'is_safe'. 'is_safe' tells Django not to apply escaping on the value returned by this filter (although the input is escaped). Used improperly, 'is_safe' could expose your application to cross-site scripting (XSS) vulnerabilities. Ensure this filter does not 1) add HTML characters, 2) remove characters, or 3) use external data in any way. Consider instead removing 'is_safe' and explicitly marking safe content with 'mark_safe()'.",
+      "metadata": {
+        "category": "security",
+        "confidence": "LOW",
+        "cwe": [
+          "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+        ],
+        "cwe2021-top25": true,
+        "cwe2022-top25": true,
+        "impact": "MEDIUM",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "likelihood": "LOW",
+        "owasp": [
+          "A07:2017 - Cross-Site Scripting (XSS)",
+          "A03:2021 - Injection"
+        ],
+        "references": [
+          "https://docs.djangoproject.com/en/3.1/topics/security/#cross-site-scripting-xss-protection",
+          "https://docs.djangoproject.com/en/3.1/howto/custom-template-tags/#filters-and-auto-escaping",
+          "https://stackoverflow.com/questions/7665512/why-use-is-safe"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "JDUyd4",
+            "url": "https://semgrep.dev/playground/r/1QTX9r/python.django.security.audit.xss.filter-with-is-safe.filter-with-is-safe",
+            "version_id": "1QTX9r"
+          }
+        },
+        "shortlink": "https://sg.run/7o12",
+        "source": "https://semgrep.dev/r/python.django.security.audit.xss.filter-with-is-safe.filter-with-is-safe",
+        "subcategory": [
+          "audit"
+        ],
+        "technology": [
+          "django"
+        ]
+      },
+      "pattern": "@register.filter(..., is_safe=True, ...)\ndef $FILTER(...):\n  ...",
+      "severity": "WARNING"
+    },
+    {
+      "fix": "True\n",
+      "id": "python.django.security.audit.xss.context-autoescape-off.context-autoescape-off",
+      "languages": [
+        "python"
+      ],
+      "message": "Detected a Context with autoescape disabled. If you are rendering any web pages, this exposes your application to cross-site scripting (XSS) vulnerabilities. Remove 'autoescape: False' or set it to 'True'.",
+      "metadata": {
+        "category": "security",
+        "confidence": "LOW",
+        "cwe": [
+          "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+        ],
+        "cwe2021-top25": true,
+        "cwe2022-top25": true,
+        "impact": "MEDIUM",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "likelihood": "LOW",
+        "owasp": [
+          "A07:2017 - Cross-Site Scripting (XSS)",
+          "A03:2021 - Injection"
+        ],
+        "references": [
+          "https://docs.djangoproject.com/en/3.1/ref/settings/#templates",
+          "https://docs.djangoproject.com/en/3.1/topics/templates/#django.template.backends.django.DjangoTemplates"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "4bUknY",
+            "url": "https://semgrep.dev/playground/r/0bTkg2/python.django.security.audit.xss.context-autoescape-off.context-autoescape-off",
+            "version_id": "0bTkg2"
+          }
+        },
+        "shortlink": "https://sg.run/nd7Y",
+        "source": "https://semgrep.dev/r/python.django.security.audit.xss.context-autoescape-off.context-autoescape-off",
+        "subcategory": [
+          "audit"
+        ],
+        "technology": [
+          "django"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-either": [
+            {
+              "pattern": "{..., \"autoescape\": $FALSE, ...}\n"
+            },
+            {
+              "pattern": "$D[\"autoescape\"] = $FALSE\n"
+            }
+          ]
+        },
+        {
+          "metavariable-pattern": {
+            "metavariable": "$FALSE",
+            "pattern": "False\n"
+          }
+        },
+        {
+          "focus-metavariable": "$FALSE"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.django.security.injection.code.globals-misuse-code-execution.globals-misuse-code-execution",
+      "languages": [
+        "python"
+      ],
+      "message": "Found request data as an index to 'globals()'. This is extremely dangerous because it allows an attacker to execute arbitrary code on the system. Refactor your code not to use 'globals()'.",
+      "metadata": {
+        "category": "security",
+        "confidence": "LOW",
+        "cwe": [
+          "CWE-96: Improper Neutralization of Directives in Statically Saved Code ('Static Code Injection')"
+        ],
+        "impact": "MEDIUM",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "likelihood": "LOW",
+        "owasp": [
+          "A03:2021 - Injection"
+        ],
+        "references": [
+          "https://github.com/mpirnat/lets-be-bad-guys/blob/d92768fb3ade32956abd53bd6bb06e19d634a084/badguys/vulnerable/views.py#L181-L186"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "AbUzAA",
+            "url": "https://semgrep.dev/playground/r/ZRTyzw/python.django.security.injection.code.globals-misuse-code-execution.globals-misuse-code-execution",
+            "version_id": "ZRTyzw"
+          }
+        },
+        "shortlink": "https://sg.run/Kl55",
+        "source": "https://semgrep.dev/r/python.django.security.injection.code.globals-misuse-code-execution.globals-misuse-code-execution",
+        "subcategory": [
+          "audit"
+        ],
+        "technology": [
+          "django"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-inside": "def $FUNC(...):\n  ...\n"
+        },
+        {
+          "pattern-either": [
+            {
+              "pattern": "$DATA = request.$W.get(...)\n...\n$INTERM = globals().get($DATA, ...)\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W.get(...)\n...\n$INTERM = globals().get(\"...\" % $DATA, ...)\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W.get(...)\n...\n$INTERM = globals().get(f\"...{$DATA}...\", ...)\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W.get(...)\n...\n$INTERM = globals().get(\"...\".format(..., $DATA, ...), ...)\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W.get(...)\n...\n$INTERM = globals()[$DATA]\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W.get(...)\n...\n$INTERM = globals()[\"...\" % $DATA]\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W.get(...)\n...\n$INTERM = globals()[f\"...{$DATA}...\"]\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W.get(...)\n...\n$INTERM = globals()[\"...\".format(..., $DATA, ...)]\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W(...)\n...\n$INTERM = globals().get($DATA, ...)\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W(...)\n...\n$INTERM = globals().get(\"...\" % $DATA, ...)\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W(...)\n...\n$INTERM = globals().get(f\"...{$DATA}...\", ...)\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W(...)\n...\n$INTERM = globals().get(\"...\".format(..., $DATA, ...), ...)\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W(...)\n...\n$INTERM = globals()[$DATA]\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W(...)\n...\n$INTERM = globals()[\"...\" % $DATA]\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W(...)\n...\n$INTERM = globals()[f\"...{$DATA}...\"]\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W(...)\n...\n$INTERM = globals()[\"...\".format(..., $DATA, ...)]\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W[...]\n...\n$INTERM = globals().get($DATA, ...)\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W[...]\n...\n$INTERM = globals().get(\"...\" % $DATA, ...)\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W[...]\n...\n$INTERM = globals().get(f\"...{$DATA}...\", ...)\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W[...]\n...\n$INTERM = globals().get(\"...\".format(..., $DATA, ...), ...)\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W[...]\n...\n$INTERM = globals()[$DATA]\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W[...]\n...\n$INTERM = globals()[\"...\" % $DATA]\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W[...]\n...\n$INTERM = globals()[f\"...{$DATA}...\"]\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W[...]\n...\n$INTERM = globals()[\"...\".format(..., $DATA, ...)]\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W\n...\n$INTERM = globals().get($DATA, ...)\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W\n...\n$INTERM = globals().get(\"...\" % $DATA, ...)\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W\n...\n$INTERM = globals().get(f\"...{$DATA}...\", ...)\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W\n...\n$INTERM = globals().get(\"...\".format(..., $DATA, ...), ...)\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W\n...\n$INTERM = globals()[$DATA]\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W\n...\n$INTERM = globals()[\"...\" % $DATA]\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W\n...\n$INTERM = globals()[f\"...{$DATA}...\"]\n...\n$INTERM(...)\n"
+            },
+            {
+              "pattern": "$DATA = request.$W\n...\n$INTERM = globals()[\"...\".format(..., $DATA, ...)]\n...\n$INTERM(...)\n"
+            }
+          ]
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.django.security.globals-as-template-context.globals-as-template-context",
+      "languages": [
+        "python"
+      ],
+      "message": "Using 'globals()' as a context to 'render(...)' is extremely dangerous. This exposes Python functions to the template that were not meant to be exposed. An attacker could use these functions to execute code that was not intended to run and could compromise the application. (This is server-side template injection (SSTI)). Do not use 'globals()'. Instead, specify each variable in a dictionary or 'django.template.Context' object, like '{\"var1\": \"hello\"}' and use that instead.",
+      "metadata": {
+        "category": "security",
+        "confidence": "LOW",
+        "cwe": [
+          "CWE-96: Improper Neutralization of Directives in Statically Saved Code ('Static Code Injection')"
+        ],
+        "impact": "HIGH",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "likelihood": "LOW",
+        "owasp": [
+          "A03:2021 - Injection"
+        ],
+        "references": [
+          "https://docs.djangoproject.com/en/3.2/ref/settings/#templates",
+          "https://docs.djangoproject.com/en/3.2/topics/templates/#django.template.backends.django.DjangoTemplates",
+          "https://docs.djangoproject.com/en/3.2/ref/templates/api/#rendering-a-context"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "j2UR3n",
+            "url": "https://semgrep.dev/playground/r/d6TbkB/python.django.security.globals-as-template-context.globals-as-template-context",
+            "version_id": "d6TbkB"
+          }
+        },
+        "shortlink": "https://sg.run/7GYv",
+        "source": "https://semgrep.dev/r/python.django.security.globals-as-template-context.globals-as-template-context",
+        "subcategory": [
+          "audit"
+        ],
+        "technology": [
+          "django"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "django.shortcuts.render(..., globals(...), ...)"
+        },
+        {
+          "pattern": "django.template.Template.render(..., globals(...), ...)"
+        },
+        {
+          "patterns": [
+            {
+              "pattern-inside": "$CONTEXT = globals(...)\n...\n"
+            },
+            {
+              "pattern-either": [
+                {
+                  "pattern": "django.shortcuts.render(..., $CONTEXT, ...)"
+                },
+                {
+                  "pattern": "django.template.Template.render(..., $CONTEXT, ...)"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.django.security.audit.xss.html-safe.html-safe",
+      "languages": [
+        "python"
+      ],
+      "message": "`html_safe()` add the `__html__` magic method to the provided class. The `__html__` method indicates to the Django template engine that the value is 'safe' for rendering. This means that normal HTML escaping will not be applied to the return value. This exposes your application to cross-site scripting (XSS) vulnerabilities. If you need to render raw HTML, consider instead using `mark_safe()` which more clearly marks the intent to render raw HTML than a class with a magic method.",
+      "metadata": {
+        "category": "security",
+        "confidence": "LOW",
+        "cwe": [
+          "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+        ],
+        "cwe2021-top25": true,
+        "cwe2022-top25": true,
+        "impact": "MEDIUM",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "likelihood": "LOW",
+        "owasp": [
+          "A07:2017 - Cross-Site Scripting (XSS)",
+          "A03:2021 - Injection"
+        ],
+        "references": [
+          "https://docs.djangoproject.com/en/3.0/_modules/django/utils/html/#html_safe",
+          "https://gist.github.com/minusworld/7885d8a81dba3ea2d1e4b8fd3c218ef5"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "ReUg5Y",
+            "url": "https://semgrep.dev/playground/r/bZT4q2/python.django.security.audit.xss.html-safe.html-safe",
+            "version_id": "bZT4q2"
+          }
+        },
+        "shortlink": "https://sg.run/gLO0",
+        "source": "https://semgrep.dev/r/python.django.security.audit.xss.html-safe.html-safe",
+        "subcategory": [
+          "audit"
+        ],
+        "technology": [
+          "django"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "django.utils.html.html_safe(...)"
+        },
+        {
+          "pattern": "@django.utils.html.html_safe\nclass $CLASS(...):\n  ...\n"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.django.security.locals-as-template-context.locals-as-template-context",
+      "languages": [
+        "python"
+      ],
+      "message": "Using 'locals()' as a context to 'render(...)' is extremely dangerous. This exposes Python functions to the template that were not meant to be exposed. An attacker could use these functions to execute code that was not intended to run and could compromise the application. (This is server-side template injection (SSTI)). Do not use 'locals()'. Instead, specify each variable in a dictionary or 'django.template.Context' object, like '{\"var1\": \"hello\"}' and use that instead.",
+      "metadata": {
+        "category": "security",
+        "confidence": "LOW",
+        "cwe": [
+          "CWE-96: Improper Neutralization of Directives in Statically Saved Code ('Static Code Injection')"
+        ],
+        "impact": "HIGH",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "likelihood": "LOW",
+        "owasp": [
+          "A03:2021 - Injection"
+        ],
+        "references": [
+          "https://docs.djangoproject.com/en/3.2/ref/settings/#templates",
+          "https://docs.djangoproject.com/en/3.2/topics/templates/#django.template.backends.django.DjangoTemplates",
+          "https://docs.djangoproject.com/en/3.2/ref/templates/api/#rendering-a-context"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "10Ued2",
+            "url": "https://semgrep.dev/playground/r/A8Tn61/python.django.security.locals-as-template-context.locals-as-template-context",
+            "version_id": "A8Tn61"
+          }
+        },
+        "shortlink": "https://sg.run/L8XL",
+        "source": "https://semgrep.dev/r/python.django.security.locals-as-template-context.locals-as-template-context",
+        "subcategory": [
+          "audit"
+        ],
+        "technology": [
+          "django"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "django.shortcuts.render(..., locals(...), ...)"
+        },
+        {
+          "pattern": "django.template.Template.render(..., locals(...), ...)"
+        },
+        {
+          "patterns": [
+            {
+              "pattern-inside": "$CONTEXT = locals(...)\n...\n"
+            },
+            {
+              "pattern-either": [
+                {
+                  "pattern": "django.shortcuts.render(..., $CONTEXT, ...)"
+                },
+                {
+                  "pattern": "django.template.Template.render(..., $CONTEXT, ...)"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.django.security.audit.xss.formathtml-fstring-parameter.formathtml-fstring-parameter",
+      "languages": [
+        "python"
+      ],
+      "message": "Passing a formatted string as first parameter to `format_html` disables the proper encoding of variables. Any HTML in the first parameter is not encoded. Using a formatted string as first parameter obscures which parameters are encoded. Correct use of `format_html` is passing a static format string as first parameter, and the variables to substitute as subsequent parameters.",
+      "metadata": {
+        "category": "security",
+        "confidence": "LOW",
+        "cwe": [
+          "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+        ],
+        "cwe2021-top25": true,
+        "cwe2022-top25": true,
+        "impact": "MEDIUM",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "likelihood": "LOW",
+        "owasp": [
+          "A07:2017 - Cross-Site Scripting (XSS)",
+          "A03:2021 - Injection"
+        ],
+        "references": [
+          "https://docs.djangoproject.com/en/3.2/ref/utils/#django.utils.html.format_html"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "v8UjKg",
+            "url": "https://semgrep.dev/playground/r/9lTng2/python.django.security.audit.xss.formathtml-fstring-parameter.formathtml-fstring-parameter",
+            "version_id": "9lTng2"
+          }
+        },
+        "shortlink": "https://sg.run/lxQo",
+        "source": "https://semgrep.dev/r/python.django.security.audit.xss.formathtml-fstring-parameter.formathtml-fstring-parameter",
+        "subcategory": [
+          "audit"
+        ],
+        "technology": [
+          "django"
+        ]
+      },
+      "pattern-either": [
+        {
+          "pattern": "format_html(<... f\"...\" ...>, ...)"
+        },
+        {
+          "pattern": "format_html(\"...\" % ..., ...)"
+        },
+        {
+          "pattern": "format_html(\"...\".format(...), ...)"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.django.security.audit.avoid-mark-safe.avoid-mark-safe",
+      "languages": [
+        "python"
+      ],
+      "message": "'mark_safe()' is used to mark a string as \"safe\" for HTML output. This disables escaping and could therefore subject the content to XSS attacks. Use 'django.utils.html.format_html()' to build HTML for rendering instead.",
+      "metadata": {
+        "category": "security",
+        "confidence": "LOW",
+        "cwe": [
+          "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+        ],
+        "cwe2021-top25": true,
+        "cwe2022-top25": true,
+        "impact": "MEDIUM",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "likelihood": "LOW",
+        "owasp": [
+          "A07:2017 - Cross-Site Scripting (XSS)",
+          "A03:2021 - Injection"
+        ],
+        "references": [
+          "https://docs.djangoproject.com/en/3.0/ref/utils/#django.utils.safestring.mark_safe",
+          "https://docs.djangoproject.com/en/3.0/ref/utils/#django.utils.html.format_html"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "eqU8Wr",
+            "url": "https://semgrep.dev/playground/r/DkTeDR/python.django.security.audit.avoid-mark-safe.avoid-mark-safe",
+            "version_id": "DkTeDR"
+          }
+        },
+        "shortlink": "https://sg.run/yd0P",
+        "source": "https://semgrep.dev/r/python.django.security.audit.avoid-mark-safe.avoid-mark-safe",
+        "source-rule-url": "https://bandit.readthedocs.io/en/latest/plugins/b703_django_mark_safe.html",
+        "subcategory": [
+          "audit"
+        ],
+        "technology": [
+          "django"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-not-inside": "django.utils.html.format_html(...)"
+        },
+        {
+          "pattern-not": "django.utils.safestring.mark_safe(\"...\")"
+        },
+        {
+          "pattern": "django.utils.safestring.mark_safe(...)"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "fix": "True\n",
+      "id": "python.django.security.audit.xss.global-autoescape-off.global-autoescape-off",
+      "languages": [
+        "python"
+      ],
+      "message": "Autoescape is globally disbaled for this Django application. If you are rendering any web pages, this exposes your application to cross-site scripting (XSS) vulnerabilities. Remove 'autoescape: False' or set it to 'True'.",
+      "metadata": {
+        "category": "security",
+        "confidence": "LOW",
+        "cwe": [
+          "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+        ],
+        "cwe2021-top25": true,
+        "cwe2022-top25": true,
+        "impact": "MEDIUM",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "likelihood": "LOW",
+        "owasp": [
+          "A07:2017 - Cross-Site Scripting (XSS)",
+          "A03:2021 - Injection"
+        ],
+        "references": [
+          "https://docs.djangoproject.com/en/3.1/ref/settings/#templates",
+          "https://docs.djangoproject.com/en/3.1/topics/templates/#django.template.backends.django.DjangoTemplates"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "5rUOXK",
+            "url": "https://semgrep.dev/playground/r/K3T985/python.django.security.audit.xss.global-autoescape-off.global-autoescape-off",
+            "version_id": "K3T985"
+          }
+        },
+        "shortlink": "https://sg.run/LwG6",
+        "source": "https://semgrep.dev/r/python.django.security.audit.xss.global-autoescape-off.global-autoescape-off",
+        "subcategory": [
+          "audit"
+        ],
+        "technology": [
+          "django"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern": "{..., 'BACKEND': ..., 'OPTIONS': {..., 'autoescape': $FALSE, ...}, ...}\n"
+        },
+        {
+          "metavariable-pattern": {
+            "metavariable": "$FALSE",
+            "pattern": "False\n"
+          }
+        },
+        {
+          "focus-metavariable": "$FALSE"
+        }
+      ],
+      "severity": "WARNING"
+    },
+    {
+      "id": "python.django.security.audit.xss.var-in-script-tag.var-in-script-tag",
+      "languages": [
+        "generic"
+      ],
+      "message": "Detected a template variable used in a script tag. Although template variables are HTML escaped, HTML escaping does not always prevent cross-site scripting (XSS) attacks when used directly in JavaScript. If you need this data on the rendered page, consider placing it in the HTML portion (outside of a script tag). Alternatively, use a JavaScript-specific encoder, such as the one available in OWASP ESAPI. For Django, you may also consider using the 'json_script' template tag and retrieving the data in your script by using the element ID (e.g., `document.getElementById`).",
+      "metadata": {
+        "category": "security",
+        "confidence": "LOW",
+        "cwe": [
+          "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+        ],
+        "cwe2021-top25": true,
+        "cwe2022-top25": true,
+        "impact": "MEDIUM",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "likelihood": "LOW",
+        "owasp": [
+          "A07:2017 - Cross-Site Scripting (XSS)",
+          "A03:2021 - Injection"
+        ],
+        "references": [
+          "https://adamj.eu/tech/2020/02/18/safely-including-data-for-javascript-in-a-django-template/?utm_campaign=Django%2BNewsletter&utm_medium=rss&utm_source=Django_Newsletter_12A",
+          "https://www.veracode.com/blog/secure-development/nodejs-template-engines-why-default-encoders-are-not-enough",
+          "https://github.com/ESAPI/owasp-esapi-js"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "qNUjk3",
+            "url": "https://semgrep.dev/playground/r/YDTgD8/python.django.security.audit.xss.var-in-script-tag.var-in-script-tag",
+            "version_id": "YDTgD8"
+          }
+        },
+        "shortlink": "https://sg.run/Ge7q",
+        "source": "https://semgrep.dev/r/python.django.security.audit.xss.var-in-script-tag.var-in-script-tag",
+        "subcategory": [
+          "audit"
+        ],
+        "technology": [
+          "django"
+        ]
+      },
+      "paths": {
+        "include": [
+          "*.html"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-inside": "<script ...> ... </script>"
+        },
+        {
+          "pattern": "{{ ... }}"
+        },
+        {
+          "pattern-not-inside": "nonce = '...'"
+        },
+        {
+          "pattern-not-inside": "nonce = \"...\""
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.django.security.passwords.password-empty-string.password-empty-string",
+      "languages": [
+        "python"
+      ],
+      "message": "'$VAR' is the empty string and is being used to set the password on '$MODEL'. If you meant to set an unusable password, set the password to None or call 'set_unusable_password()'.",
+      "metadata": {
+        "category": "security",
+        "confidence": "MEDIUM",
+        "cwe": [
+          "CWE-521: Weak Password Requirements"
+        ],
+        "impact": "MEDIUM",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "likelihood": "LOW",
+        "owasp": [
+          "A07:2021 - Identification and Authentication Failures"
+        ],
+        "references": [
+          "https://docs.djangoproject.com/en/3.0/ref/contrib/auth/#django.contrib.auth.models.User.set_password"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "9AU1jW",
+            "url": "https://semgrep.dev/playground/r/DkTeOP/python.django.security.passwords.password-empty-string.password-empty-string",
+            "version_id": "DkTeOP"
+          }
+        },
+        "shortlink": "https://sg.run/oxnR",
+        "source": "https://semgrep.dev/r/python.django.security.passwords.password-empty-string.password-empty-string",
+        "subcategory": [
+          "vuln"
+        ],
+        "technology": [
+          "django"
+        ]
+      },
+      "patterns": [
+        {
+          "pattern-either": [
+            {
+              "pattern": "$MODEL.set_password($EMPTY)\n...\n$MODEL.save()\n"
+            },
+            {
+              "pattern": "$VAR = $EMPTY\n...\n$MODEL.set_password($VAR)\n...\n$MODEL.save()\n"
+            }
+          ]
+        },
+        {
+          "metavariable-regex": {
+            "metavariable": "$EMPTY",
+            "regex": "(\\'\\'|\\\"\\\")"
+          }
+        }
+      ],
+      "severity": "ERROR"
+    },
+    {
+      "id": "python.django.security.audit.xss.template-var-unescaped-with-safeseq.template-var-unescaped-with-safeseq",
+      "languages": [
+        "regex"
+      ],
+      "message": "Detected a template variable where autoescaping is explicitly disabled with '| safeseq' filter. This allows rendering of raw HTML in this segment. Ensure no user data is rendered here, otherwise this is a cross-site scripting (XSS) vulnerability. If you must do this, use `mark_safe` in your Python code.",
+      "metadata": {
+        "category": "security",
+        "confidence": "LOW",
+        "cwe": [
+          "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+        ],
+        "cwe2021-top25": true,
+        "cwe2022-top25": true,
+        "impact": "MEDIUM",
+        "license": "Commons Clause License Condition v1.0[LGPL-2.1-only]",
+        "likelihood": "LOW",
+        "owasp": [
+          "A07:2017 - Cross-Site Scripting (XSS)",
+          "A03:2021 - Injection"
+        ],
+        "references": [
+          "https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#safeseq"
+        ],
+        "semgrep.dev": {
+          "rule": {
+            "rule_id": "KxUbdx",
+            "url": "https://semgrep.dev/playground/r/e1TAWn/python.django.security.audit.xss.template-var-unescaped-with-safeseq.template-var-unescaped-with-safeseq",
+            "version_id": "e1TAWn"
+          }
+        },
+        "shortlink": "https://sg.run/5Q30",
+        "source": "https://semgrep.dev/r/python.django.security.audit.xss.template-var-unescaped-with-safeseq.template-var-unescaped-with-safeseq",
+        "subcategory": [
+          "audit"
+        ],
+        "technology": [
+          "django"
+        ]
+      },
+      "paths": {
+        "include": [
+          "*.html"
+        ]
+      },
+      "pattern-regex": "{{.*?\\|\\s+safeseq(\\s+}})?",
+      "severity": "WARNING"
+    }
+  ]
+}
